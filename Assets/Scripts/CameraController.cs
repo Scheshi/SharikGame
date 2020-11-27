@@ -1,23 +1,39 @@
 ﻿using UnityEngine;
 
-public class CameraController : IUpdatable
+
+namespace SharikGame
 {
-
-    private Camera _main;
-    private Transform _player;
-    private Vector3 _position;
-
-
-    public CameraController(Transform playerTransform, Vector3 cameraLocalPosition)
+    public class CameraController : IUpdatable
     {
-        _player = playerTransform;
-        _position = cameraLocalPosition;
-        _main = Camera.main;
-    }
+        #region Fields
 
-    public void Tick()
-    {
-        _main.transform.position = _player.position + _position;
-        _main.transform.LookAt(_player);
+        private Camera _main;
+        private Transform _player;
+        private Vector3 _position;
+
+        #endregion
+
+
+        #region Contructors
+
+        public CameraController(Transform playerTransform, Vector3 cameraLocalPosition)
+        {
+            _player = playerTransform;
+            _position = cameraLocalPosition;
+            _main = Camera.main;
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        public void Tick()
+        {
+            _main.transform.position = _player.position + _position;
+            _main.transform.LookAt(_player);
+        }
+
+        #endregion
     }
 }

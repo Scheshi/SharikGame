@@ -2,40 +2,86 @@
 using UnityEngine;
 
 
-public class GameManager : MonoBehaviour
+namespace SharikGame
 {
-    [SerializeField] private Vector3 _cameraLocalPositionFromPlayer;
-    [SerializeField] private GameObject _playerPrefab;
-    [SerializeField] private Transform _startPoint;
-    private List<IUpdatable> _updatables = new List<IUpdatable>();
-    private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
-    private Transform _player;
-    
-
-    private void Start()
+    public class GameManager : MonoBehaviour
     {
-        var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
-        var playerView = player.GetComponent<PlayerView>();
-        _player = player.transform;
-        _updatables.Add(playerView);
-        _fixedUpdatables.Add(playerView);
-        _updatables.Add(new CameraController(_player, _cameraLocalPositionFromPlayer));
-    }
+        #region Fields
+
+        [Header("Player")]
+        [SerializeField] private Vector3 _cameraLocalPositionFromPlayer;
+        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private Transform _startPoint;
+
+        [Header("Enemy")]
+        [SerializeField] private List<Transform> _enemySpawnPoints = new List<Transform>();
+        [SerializeField] private GameObject _enemyPrefab;
+        [SerializeField] private float _distancePlayerForSpawnEnemy;
+        
+
+        private List<IUpdatable> _updatables = new List<IUpdatable>();
+        private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
+        private Transform _player;
+
+        #endregion
 
 
-    private void Update()
-    {
-        foreach(var updatable in _updatables)
+        #region UnityMethods
+
+        private void Start()
         {
-            updatable.Tick();
+            var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
+            var playerView = player.GetComponent<PlayerView>();
+            _player = player.transform;
+            _updatables.Add(playerView);
+            _fixedUpdatables.Add(playerView);
+            _updatables.Add(new CameraController(_player, _cameraLocalPositionFromPlayer));
         }
-    }
 
-    private void FixedUpdate()
-    {
-        foreach(var fixedUpdateble in _fixedUpdatables)
+
+        private void Update()
         {
-            fixedUpdateble.FixedTick();
+            CheckDistanceEnemyAndPlayer();
+
+            foreach (var updatable in _updatables)
+            {
+                updatable.Tick();
+            }
         }
+
+        private void FixedUpdate()
+        {
+            foreach (var fixedUpdateble in _fixedUpdatables)
+            {
+                fixedUpdateble.FixedTick();
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        private void CheckDistanceEnemyAndPlayer()
+        {
+            if (_enemySpawnPoints.Count > 0)
+            {
+                foreach (var point in _enemySpawnPoints)
+                {
+                    if ((_player.position - point.position).sqrMagnitude <=
+                        _distancePlayerForSpawnEnemy * _distancePlayerForSpawnEnemy)
+                    {
+                        var enemyView = Instantiate(_enemyPrefab, point.position, Quaternion.identity).GetComponent<EnemyView>();
+                        _enemySpawnPoints.Remove(point);
+                        _fixedUpdatables.Add(enemyView);
+                        _updatables.Add(enemyView);
+                        break;
+
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
