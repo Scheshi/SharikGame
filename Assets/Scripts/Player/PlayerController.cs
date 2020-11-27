@@ -8,12 +8,26 @@ public class PlayerController : IUpdatable, IFixedUpdatable
     private PlayerModel _model;
     private Vector3 _movement;
 
+
+    public PlayerController()
+    {
+        _model = new PlayerModel();
+        _model.HealthPoints = 100.0f;
+        _model.Speed = 2;
+    }
+
     public PlayerController(float speed, float health, float forceJump, GameObject player)
     {
         _model = new PlayerModel();
         _model.Speed = speed;
         _model.HealthPoints = health;
         _model.ForceJump = forceJump;
+        _rigidbody = player.GetComponent<Rigidbody>();
+    }
+
+    public PlayerController(PlayerModel model, GameObject player)
+    {
+        _model = model;
         _rigidbody = player.GetComponent<Rigidbody>();
     }
 

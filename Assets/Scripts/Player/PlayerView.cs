@@ -3,17 +3,21 @@ using System;
 
 public class PlayerView : MonoBehaviour, IUpdatable, IFixedUpdatable
 {
-    [SerializeField] private float _speed = 0.3f;
-    [SerializeField] private float _health = 100.0f;
-    [SerializeField] private float _forceJump = 2.0f;
+    [SerializeField] private PlayerModel _model;
     private PlayerController _controller;
     private Animator _animator;
-    private bool _isGround;
 
 
     private void Awake()
     {
-        _controller = new PlayerController(_speed, _health, _forceJump, gameObject);
+        if(_model.HealthPoints > 0)
+        {
+            _controller = new PlayerController(_model, gameObject);
+        }
+        else
+        {
+            _controller = new PlayerController();
+        }
     }
 
     private void Start()
