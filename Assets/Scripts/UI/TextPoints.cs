@@ -14,6 +14,14 @@ namespace SharikGame
             _text.text = $"{_currentPoint} очков";
         }
 
+        public int GetPoints
+        {
+            get
+            {
+                return _currentPoint;
+            }
+        }
+
         public void Display(int point)
         {
             _currentPoint += point;

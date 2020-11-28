@@ -5,7 +5,6 @@ using UnityEngine;
 namespace SharikGame {
     public abstract class Bonus : MonoBehaviour, IDisposable
     {
-        [SerializeField]private float _radius = 5.0f;
         protected IView _slider;
         protected IView _text;
 

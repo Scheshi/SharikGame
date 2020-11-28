@@ -45,7 +45,6 @@ namespace SharikGame
         {
             var vectorMovement = (_target - _enemy.position).normalized;
             _rigidbody.velocity = vectorMovement * _model.Speed;
-            Debug.Log(vectorMovement);
         }
 
         public void Tick()

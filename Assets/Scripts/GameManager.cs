@@ -18,9 +18,14 @@ namespace SharikGame
         [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private float _distancePlayerForSpawnEnemy;
 
+        [Header("UI")]
+        [SerializeField] private GameObject _gameOverUI;
+
         private List<IUpdatable> _updatables = new List<IUpdatable>();
         private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
         private Transform _player;
+        private TextPoints _pointsText;
+        private int _maxPoints;
 
         #endregion
 
@@ -29,12 +34,15 @@ namespace SharikGame
 
         private void Start()
         {
+            GameOver(false);
             var objects = FindObjectsOfType<PointBonus>();
+            _maxPoints = objects.Length;
+            Debug.Log(_maxPoints);
             var slider = new SliderPoints(objects.Length);
-            var text = new TextPoints();
+            _pointsText = new TextPoints();
             foreach (var obj in objects)
             {
-                obj.Initialize(slider, text);
+                obj.Initialize(slider, _pointsText);
             }
             var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
             var playerView = player.GetComponent<PlayerView>();
@@ -53,6 +61,10 @@ namespace SharikGame
             {
                 updatable.Tick();
             }
+            if (_pointsText.GetPoints >= _maxPoints)
+            {
+                GameOver(true);
+            } 
         }
 
         private void FixedUpdate()
@@ -86,6 +98,13 @@ namespace SharikGame
                     }
                 }
             }
+        }
+
+        private void GameOver(bool isActive)
+        {
+
+            Time.timeScale = isActive ? 0.0f : 1.0f;
+            _gameOverUI.SetActive(isActive);
         }
 
         #endregion
