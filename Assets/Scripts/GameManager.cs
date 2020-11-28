@@ -17,7 +17,6 @@ namespace SharikGame
         [SerializeField] private List<Transform> _enemySpawnPoints = new List<Transform>();
         [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private float _distancePlayerForSpawnEnemy;
-        
 
         private List<IUpdatable> _updatables = new List<IUpdatable>();
         private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
@@ -30,6 +29,13 @@ namespace SharikGame
 
         private void Start()
         {
+            var objects = FindObjectsOfType<Bonus>();
+            var slider = new SliderPoints(objects.Length);
+            var text = new TextPoints();
+            foreach (var obj in objects)
+            {
+                obj.Initialize(slider, text);
+            }
             var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
             var playerView = player.GetComponent<PlayerView>();
             _player = player.transform;
