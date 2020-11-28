@@ -8,6 +8,7 @@ namespace SharikGame
     {
         #region Fields
 
+        public event Action Death;
         public event Action<Vector3> Movement;
         private Rigidbody _rigidbody;
         private PlayerModel _model;
@@ -52,6 +53,11 @@ namespace SharikGame
         {
             _model.HealthPoints -= model.HealthPoints;
             _model.Speed -= model.Speed;
+
+            if(_model.HealthPoints <= 0)
+            {
+                Death.Invoke();
+            }
         }
 
         public void Tick()

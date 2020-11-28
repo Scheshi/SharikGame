@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using System;
 
 
 namespace SharikGame
 {
-    public class PlayerView : MonoBehaviour, IUpdatable, IFixedUpdatable
+    public class PlayerView : MonoBehaviour, IUpdatable, IFixedUpdatable, IDisposable
     {
         #region Fields
 
@@ -37,10 +38,21 @@ namespace SharikGame
             }
         }
 
+        private void OnEnable()
+        {
+            _controller.Movement += AnimationMove;
+            _controller.Death += Dispose;
+        }
+
+        private void OnDisable()
+        {
+            _controller.Movement -= AnimationMove;
+            _controller.Death -= Dispose;
+        }
+
         private void Start()
         {
             _animator = GetComponent<Animator>();
-            _controller.Movement += AnimationMove;
         }
 
         #endregion
@@ -62,6 +74,11 @@ namespace SharikGame
         public void FixedTick()
         {
             _controller.FixedTick();
+        }
+
+        public void Dispose()
+        {
+            Destroy(gameObject);
         }
 
         #endregion
