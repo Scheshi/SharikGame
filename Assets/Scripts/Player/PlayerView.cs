@@ -14,6 +14,15 @@ namespace SharikGame
         #endregion
 
 
+        public PlayerController GetController 
+        { 
+            get
+            {
+                return _controller;
+            } 
+        }
+
+
         #region UnityMethods
 
         private void Awake()

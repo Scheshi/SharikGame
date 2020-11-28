@@ -29,7 +29,7 @@ namespace SharikGame
 
         private void Start()
         {
-            var objects = FindObjectsOfType<Bonus>();
+            var objects = FindObjectsOfType<PointBonus>();
             var slider = new SliderPoints(objects.Length);
             var text = new TextPoints();
             foreach (var obj in objects)

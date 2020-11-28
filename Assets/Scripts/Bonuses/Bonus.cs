@@ -14,7 +14,7 @@ namespace SharikGame {
             Destroy(gameObject);
         }
 
-        protected abstract void Interaction();
+        protected abstract void Interaction(PlayerView playerView);
 
         public void Initialize(IView slider, IView text)
         {
@@ -24,9 +24,10 @@ namespace SharikGame {
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.gameObject.GetComponent<PlayerView>() != null)
+            var playerView = collision.gameObject.GetComponent<PlayerView>();
+            if (playerView != null)
             {
-                Interaction();
+                Interaction(playerView);
                 Dispose();
             }
         }

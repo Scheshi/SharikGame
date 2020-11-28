@@ -1,9 +1,9 @@
 ﻿namespace SharikGame
 {
-    public class GoodBonus : Bonus
+    public class PointBonus : Bonus
     {
 
-        protected override void Interaction()
+        protected override void Interaction(PlayerView playerView)
         {
             _slider.Display(1);
             _text.Display(1);

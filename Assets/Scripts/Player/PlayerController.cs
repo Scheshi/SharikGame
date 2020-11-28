@@ -48,6 +48,12 @@ namespace SharikGame
 
         #region Methods
 
+        public void Adjust(PlayerModel model)
+        {
+            _model.HealthPoints -= model.HealthPoints;
+            _model.Speed -= model.Speed;
+        }
+
         public void Tick()
         {
             _movement.x = Input.GetAxis("Horizontal");
