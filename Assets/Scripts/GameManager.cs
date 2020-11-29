@@ -14,19 +14,28 @@ namespace SharikGame
         [SerializeField] private Transform _startPoint;
 
         [Header("Enemy")]
-        [SerializeField] private List<Transform> _enemySpawnPoints = new List<Transform>();
+        [SerializeField] private Transform[] _enemySpawnPoints;
         [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private float _distancePlayerForSpawnEnemy;
-        
+
+        [Header("UI")]
+        [SerializeField] private GameObject _gameOverUI;
 
         private List<IUpdatable> _updatables = new List<IUpdatable>();
         private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
+        private List<IUpdatable> _newUpdatables = new List<IUpdatable>();
+        private List<IFixedUpdatable> _newFixedUpdatables = new List<IFixedUpdatable>();
+
+
         private Transform _player;
+        private TextPoints _pointsText;
+        private int _maxPoints;
 
         #endregion
 
 
         #region UnityMethods
+
 
         private void Start()
         {
@@ -35,18 +44,46 @@ namespace SharikGame
             _player = player.transform;
             _updatables.Add(playerView);
             _fixedUpdatables.Add(playerView);
-            _updatables.Add(new CameraController(_player, _cameraLocalPositionFromPlayer));
+
+            _updatables.Add
+                (new EnemyWather(_enemySpawnPoints, _player,
+                _distancePlayerForSpawnEnemy, _enemyPrefab, this));
+
+            GameOverChecker.Initialize(_gameOverUI);
+            GameOverChecker.GameOver(false);
+
+            var objects = FindObjectsOfType<PointBonus>();
+            _maxPoints = objects.Length;
+            Debug.Log(_maxPoints);
+            var slider = new SliderPoints(objects.Length);
+            _pointsText = new TextPoints();
+
+            foreach (var obj in objects)
+            {
+                obj.Initialize(slider, _pointsText);
+            }
+
+            _updatables.Add
+                (new CameraController(_player, _cameraLocalPositionFromPlayer));
         }
 
 
         private void Update()
         {
-            CheckDistanceEnemyAndPlayer();
-
             foreach (var updatable in _updatables)
             {
                 updatable.Tick();
             }
+            if(_newUpdatables.Count > 0)
+            {
+                _updatables.AddRange(_newUpdatables);
+                _newUpdatables.Clear();
+            }
+
+            if (_pointsText.GetPoints >= _maxPoints)
+            {
+                GameOverChecker.GameOver(true);
+            } 
         }
 
         private void FixedUpdate()
@@ -55,6 +92,11 @@ namespace SharikGame
             {
                 fixedUpdateble.FixedTick();
             }
+            if(_newFixedUpdatables.Count > 0)
+            {
+                _fixedUpdatables.AddRange(_newFixedUpdatables);
+                _newFixedUpdatables.Clear();
+            }
         }
 
         #endregion
@@ -62,24 +104,14 @@ namespace SharikGame
 
         #region Methods
 
-        private void CheckDistanceEnemyAndPlayer()
+        public void AddingUpdatable(IUpdatable updatable)
         {
-            if (_enemySpawnPoints.Count > 0)
-            {
-                foreach (var point in _enemySpawnPoints)
-                {
-                    if ((_player.position - point.position).sqrMagnitude <=
-                        _distancePlayerForSpawnEnemy * _distancePlayerForSpawnEnemy)
-                    {
-                        var enemyView = Instantiate(_enemyPrefab, point.position, Quaternion.identity).GetComponent<EnemyView>();
-                        _enemySpawnPoints.Remove(point);
-                        _fixedUpdatables.Add(enemyView);
-                        _updatables.Add(enemyView);
-                        break;
+            _newUpdatables.Add(updatable);
+        }
 
-                    }
-                }
-            }
+        public void AddingFixedUpdatable(IFixedUpdatable updatable)
+        {
+            _newFixedUpdatables.Add(updatable);
         }
 
         #endregion

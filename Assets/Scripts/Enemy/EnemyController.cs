@@ -7,8 +7,8 @@ namespace SharikGame
     {
         #region Fields
 
-        private Transform _enemy;
-        private Rigidbody _rigidbody;
+        private Transform _enemyTransform;
+        private Rigidbody _enemyRigidbody;
         private Vector3 _target;
         private EnemyModel _model;
 
@@ -16,24 +16,23 @@ namespace SharikGame
 
 
         #region Contructors
-        public EnemyController(GameObject enemy)
-        {
-            _model = new EnemyModel
-            {
-                Damage = 5.0f,
-                Speed = 1.5f
-            };
-            _enemy = enemy.transform;
-            _rigidbody = enemy.GetComponent<Rigidbody>();
-
-        }
-
-
         public EnemyController(EnemyModel model, GameObject enemy)
         {
-            _enemy = enemy.transform;
-            _rigidbody = enemy.GetComponent<Rigidbody>();
-            _model = model;
+            _enemyTransform = enemy.transform;
+
+            enemy.TryGetComponent(out _enemyRigidbody);
+            if (model.Speed <= 0)
+            {
+                model = new EnemyModel
+                {
+                    Damage = 0.5f,
+                    Speed = 1.5f
+                };
+            }
+            else
+            {
+                _model = model;
+            }
         }
 
         #endregion
@@ -43,25 +42,24 @@ namespace SharikGame
 
         public void FixedTick()
         {
-            var vectorMovement = (_target - _enemy.position).normalized;
-            _rigidbody.velocity = vectorMovement * _model.Speed;
-            Debug.Log(vectorMovement);
+                var vectorMovement = (_target - _enemyTransform.position).normalized;
+                _enemyRigidbody.velocity = vectorMovement * _model.Speed;
         }
 
         public void Tick()
         {
-            Collider[] hits = Physics.OverlapSphere(_enemy.position, 15.0f);
-            if (hits.Length > 0)
-            {
+            //Не знаю, нафига. Ну да ладно.
+            Collider[] hits = Physics.OverlapSphere(_enemyTransform.position, 5.0f);
                 foreach (var obj in hits)
                 {
-                    if (obj.GetComponent<PlayerView>() != null)
+                    PlayerView playerView;
+                    obj.TryGetComponent(out playerView);
+                    if (playerView != null)
                     {
                         _target = obj.transform.position;
+                        break;
                     }
                 }
-
-            }
         }
 
         #endregion
