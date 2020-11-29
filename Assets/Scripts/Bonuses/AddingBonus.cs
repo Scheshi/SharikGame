@@ -10,7 +10,7 @@ namespace SharikGame
         [SerializeField] private PlayerModel _plusingModel;
         protected override void Interaction(PlayerView playerView)
         {
-            playerView.GetController.Adjust(_plusingModel);
+            PlayerAdjust.Adjust(_plusingModel);
         }
     }
 }

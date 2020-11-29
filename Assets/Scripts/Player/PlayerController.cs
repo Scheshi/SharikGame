@@ -4,14 +4,13 @@ using System;
 
 namespace SharikGame
 {
-    public class PlayerController : IUpdatable, IFixedUpdatable
+    public class PlayerController : IFixedUpdatable
     {
         #region Fields
 
+        public PlayerModel _model;
         public event Action Death;
-        public event Action<Vector3> Movement;
         private Rigidbody _rigidbody;
-        private PlayerModel _model;
         private Vector3 _movement;
 
         #endregion
@@ -26,6 +25,7 @@ namespace SharikGame
                 Speed = 2.0f
             };
             _rigidbody = player.GetComponent<Rigidbody>();
+            PlayerAdjust.Initialize(this);
         }
 
         public PlayerController(float speed, float health, float forceJump, GameObject player)
@@ -51,8 +51,8 @@ namespace SharikGame
 
         public void Adjust(PlayerModel model)
         {
-            _model.HealthPoints -= model.HealthPoints;
-            _model.Speed -= model.Speed;
+            _model.HealthPoints += model.HealthPoints;
+            _model.Speed += model.Speed;
 
             if(_model.HealthPoints <= 0)
             {
@@ -60,11 +60,9 @@ namespace SharikGame
             }
         }
 
-        public void Tick()
+        public void CheckMove(Vector3 vector)
         {
-            _movement.x = Input.GetAxis("Horizontal");
-            _movement.z = Input.GetAxis("Vertical");
-            Movement?.Invoke(_movement);
+            _movement = vector;
         }
 
         public void FixedTick()

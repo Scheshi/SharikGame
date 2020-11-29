@@ -18,15 +18,6 @@ namespace SharikGame
         #endregion
 
 
-        public PlayerController GetController 
-        { 
-            get
-            {
-                return _controller;
-            } 
-        }
-
-
         #region UnityMethods
 
         private void Awake()
@@ -43,13 +34,11 @@ namespace SharikGame
 
         private void OnEnable()
         {
-            _controller.Movement += AnimationMove;
             _controller.Death += Dispose;
         }
 
         private void OnDisable()
         {
-            _controller.Movement -= AnimationMove;
             _controller.Death -= Dispose;
         }
 
@@ -65,15 +54,18 @@ namespace SharikGame
 
         #region Methods
 
-        private void AnimationMove(Vector3 vector)
+        private void AnimationMove()
         {
+            var vector = 
+                new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            _controller.CheckMove(vector);
             _animator.SetFloat(_forwardAnimationHash, vector.z);
             _animator.SetFloat(_rightAnimationHash, vector.x);
         }
 
         public void Tick()
         {
-            _controller.Tick();
+            AnimationMove();
         }
 
         public void FixedTick()
