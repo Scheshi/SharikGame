@@ -23,6 +23,10 @@ namespace SharikGame
 
         private List<IUpdatable> _updatables = new List<IUpdatable>();
         private List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
+        private List<IUpdatable> _newUpdatables = new List<IUpdatable>();
+        private List<IFixedUpdatable> _newFixedUpdatables = new List<IFixedUpdatable>();
+
+
         private Transform _player;
         private TextPoints _pointsText;
         private int _maxPoints;
@@ -32,8 +36,19 @@ namespace SharikGame
 
         #region UnityMethods
 
+
         private void Start()
         {
+            var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
+            var playerView = player.GetComponent<PlayerView>();
+            _player = player.transform;
+            _updatables.Add(playerView);
+            _fixedUpdatables.Add(playerView);
+
+            _updatables.Add
+                (new EnemyWather(_enemySpawnPoints, _player,
+                _distancePlayerForSpawnEnemy, _enemyPrefab, this));
+
             GameOverChecker.Initialize(_gameOverUI);
             GameOverChecker.GameOver(false);
 
@@ -47,16 +62,9 @@ namespace SharikGame
             {
                 obj.Initialize(slider, _pointsText);
             }
-            var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
-            var playerView = player.GetComponent<PlayerView>();
-            _player = player.transform;
-            _updatables.Add(playerView);
-            _fixedUpdatables.Add(playerView);
+
             _updatables.Add
                 (new CameraController(_player, _cameraLocalPositionFromPlayer));
-            _updatables.Add
-                (new EnemyWather(_enemySpawnPoints, _player,
-                _distancePlayerForSpawnEnemy, _enemyPrefab, this));
         }
 
 
@@ -66,6 +74,12 @@ namespace SharikGame
             {
                 updatable.Tick();
             }
+            if(_newUpdatables.Count > 0)
+            {
+                _updatables.AddRange(_newUpdatables);
+                _newUpdatables.Clear();
+            }
+
             if (_pointsText.GetPoints >= _maxPoints)
             {
                 GameOverChecker.GameOver(true);
@@ -78,6 +92,11 @@ namespace SharikGame
             {
                 fixedUpdateble.FixedTick();
             }
+            if(_newFixedUpdatables.Count > 0)
+            {
+                _fixedUpdatables.AddRange(_newFixedUpdatables);
+                _newFixedUpdatables.Clear();
+            }
         }
 
         #endregion
@@ -87,12 +106,12 @@ namespace SharikGame
 
         public void AddingUpdatable(IUpdatable updatable)
         {
-            _updatables.Add(updatable);
+            _newUpdatables.Add(updatable);
         }
 
         public void AddingFixedUpdatable(IFixedUpdatable updatable)
         {
-            _fixedUpdatables.Add(updatable);
+            _newFixedUpdatables.Add(updatable);
         }
 
         #endregion

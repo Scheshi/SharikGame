@@ -9,7 +9,6 @@ namespace SharikGame
         #region Fields
 
         public PlayerModel _model;
-        public event Action Death;
         private Rigidbody _rigidbody;
         private Vector3 _movement;
 
@@ -18,47 +17,23 @@ namespace SharikGame
 
         #region Constructors
 
-        public PlayerController(GameObject player)
+        public PlayerController(PlayerModel model, GameObject player)
         {
-            _model = new PlayerModel {
+            if(model.HealthPoints <= 0 || model.Speed <= 0)
+            model = new PlayerModel
+            {
                 HealthPoints = 100.0f,
                 Speed = 2.0f
             };
-            _rigidbody = player.GetComponent<Rigidbody>();
-            PlayerAdjust.Initialize(this);
-        }
-
-        public PlayerController(float speed, float health, float forceJump, GameObject player)
-        {
-            _model = new PlayerModel {
-                HealthPoints = health,
-                Speed = speed,
-                ForceJump = forceJump
-            };
-            _rigidbody = player.GetComponent<Rigidbody>();
-        }
-
-        public PlayerController(PlayerModel model, GameObject player)
-        {
             _model = model;
             _rigidbody = player.GetComponent<Rigidbody>();
+            PlayerAdjust.Initialize(this);
         }
 
         #endregion
 
 
         #region Methods
-
-        public void Adjust(PlayerModel model)
-        {
-            _model.HealthPoints += model.HealthPoints;
-            _model.Speed += model.Speed;
-
-            if(_model.HealthPoints <= 0)
-            {
-                Death?.Invoke();
-            }
-        }
 
         public void CheckMove(Vector3 vector)
         {
@@ -67,8 +42,10 @@ namespace SharikGame
 
         public void FixedTick()
         {
+            _movement *= _model.Speed;
             _movement.y = _rigidbody.velocity.y;
-            _rigidbody.velocity = _movement * _model.Speed;
+            _rigidbody.velocity = _movement;
+            
         }
 
         #endregion

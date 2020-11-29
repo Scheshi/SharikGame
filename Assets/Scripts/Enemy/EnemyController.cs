@@ -42,25 +42,24 @@ namespace SharikGame
 
         public void FixedTick()
         {
-            var vectorMovement = (_target - _enemyTransform.position).normalized;
-            _enemyRigidbody.velocity = vectorMovement * _model.Speed;
+                var vectorMovement = (_target - _enemyTransform.position).normalized;
+                _enemyRigidbody.velocity = vectorMovement * _model.Speed;
         }
 
         public void Tick()
         {
-            Collider[] hits = null;
-            Physics.OverlapSphereNonAlloc(_enemyTransform.position, 15.0f, hits);
-            if (hits.Length > 0)
-            {
+            //Не знаю, нафига. Ну да ладно.
+            Collider[] hits = Physics.OverlapSphere(_enemyTransform.position, 5.0f);
                 foreach (var obj in hits)
                 {
-                    if (obj.GetComponent<PlayerView>() != null)
+                    PlayerView playerView;
+                    obj.TryGetComponent(out playerView);
+                    if (playerView != null)
                     {
                         _target = obj.transform.position;
+                        break;
                     }
                 }
-
-            }
         }
 
         #endregion

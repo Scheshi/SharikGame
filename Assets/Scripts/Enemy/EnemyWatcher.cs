@@ -33,10 +33,14 @@ namespace SharikGame
                     if ((_playerTransform.position - point.position).sqrMagnitude <=
                         _distance * _distance)
                     {
-                        var enemyView = GameObject.Instantiate(_enemyObject, point.position, Quaternion.identity).GetComponent<EnemyView>();
-                        _enemySpawnPoints.Remove(point);
+                        EnemyView enemyView = null;
+                        GameObject.Instantiate
+                            (_enemyObject, point.position, Quaternion.identity)
+                            .TryGetComponent(out enemyView);
+
                         _manager.AddingUpdatable(enemyView);
                         _manager.AddingFixedUpdatable(enemyView);
+                        _enemySpawnPoints.Remove(point);
                         break;
                     }
                 }

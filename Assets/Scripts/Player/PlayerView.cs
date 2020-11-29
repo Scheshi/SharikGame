@@ -22,24 +22,17 @@ namespace SharikGame
 
         private void Awake()
         {
-            if (_model.HealthPoints > 0)
-            {
                 _controller = new PlayerController(_model, gameObject);
-            }
-            else
-            {
-                _controller = new PlayerController(gameObject);
-            }
         }
 
         private void OnEnable()
         {
-            _controller.Death += Dispose;
+            PlayerAdjust.Death += Dispose;
         }
 
         private void OnDisable()
         {
-            _controller.Death -= Dispose;
+            PlayerAdjust.Death -= Dispose;
         }
 
         private void Start()
