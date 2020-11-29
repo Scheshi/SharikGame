@@ -56,7 +56,7 @@ namespace SharikGame
 
             if(_model.HealthPoints <= 0)
             {
-                Death.Invoke();
+                Death?.Invoke();
             }
         }
 

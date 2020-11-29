@@ -14,7 +14,7 @@ namespace SharikGame
         [SerializeField] private Transform _startPoint;
 
         [Header("Enemy")]
-        [SerializeField] private List<Transform> _enemySpawnPoints = new List<Transform>();
+        [SerializeField] private Transform[] _enemySpawnPoints;
         [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private float _distancePlayerForSpawnEnemy;
 
@@ -34,12 +34,15 @@ namespace SharikGame
 
         private void Start()
         {
-            GameOver(false);
+            GameOverChecker.Initialize(_gameOverUI);
+            GameOverChecker.GameOver(false);
+
             var objects = FindObjectsOfType<PointBonus>();
             _maxPoints = objects.Length;
             Debug.Log(_maxPoints);
             var slider = new SliderPoints(objects.Length);
             _pointsText = new TextPoints();
+
             foreach (var obj in objects)
             {
                 obj.Initialize(slider, _pointsText);
@@ -49,21 +52,23 @@ namespace SharikGame
             _player = player.transform;
             _updatables.Add(playerView);
             _fixedUpdatables.Add(playerView);
-            _updatables.Add(new CameraController(_player, _cameraLocalPositionFromPlayer));
+            _updatables.Add
+                (new CameraController(_player, _cameraLocalPositionFromPlayer));
+            _updatables.Add
+                (new EnemyWather(_enemySpawnPoints, _player,
+                _distancePlayerForSpawnEnemy, _enemyPrefab, this));
         }
 
 
         private void Update()
         {
-            CheckDistanceEnemyAndPlayer();
-
             foreach (var updatable in _updatables)
             {
                 updatable.Tick();
             }
             if (_pointsText.GetPoints >= _maxPoints)
             {
-                GameOver(true);
+                GameOverChecker.GameOver(true);
             } 
         }
 
@@ -80,31 +85,14 @@ namespace SharikGame
 
         #region Methods
 
-        private void CheckDistanceEnemyAndPlayer()
+        public void AddingUpdatable(IUpdatable updatable)
         {
-            if (_enemySpawnPoints.Count > 0)
-            {
-                foreach (var point in _enemySpawnPoints)
-                {
-                    if ((_player.position - point.position).sqrMagnitude <=
-                        _distancePlayerForSpawnEnemy * _distancePlayerForSpawnEnemy)
-                    {
-                        var enemyView = Instantiate(_enemyPrefab, point.position, Quaternion.identity).GetComponent<EnemyView>();
-                        _enemySpawnPoints.Remove(point);
-                        _fixedUpdatables.Add(enemyView);
-                        _updatables.Add(enemyView);
-                        break;
-
-                    }
-                }
-            }
+            _updatables.Add(updatable);
         }
 
-        private void GameOver(bool isActive)
+        public void AddingFixedUpdatable(IFixedUpdatable updatable)
         {
-
-            Time.timeScale = isActive ? 0.0f : 1.0f;
-            _gameOverUI.SetActive(isActive);
+            _fixedUpdatables.Add(updatable);
         }
 
         #endregion

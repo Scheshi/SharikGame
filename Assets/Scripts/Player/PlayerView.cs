@@ -12,6 +12,9 @@ namespace SharikGame
         private PlayerController _controller;
         private Animator _animator;
 
+        private int _forwardAnimationHash;
+        private int _rightAnimationHash;
+
         #endregion
 
 
@@ -53,6 +56,8 @@ namespace SharikGame
         private void Start()
         {
             _animator = GetComponent<Animator>();
+            _forwardAnimationHash = Animator.StringToHash("Forward");
+            _rightAnimationHash = Animator.StringToHash("Right");
         }
 
         #endregion
@@ -62,8 +67,8 @@ namespace SharikGame
 
         private void AnimationMove(Vector3 vector)
         {
-            _animator.SetFloat("Forward", vector.z);
-            _animator.SetFloat("Right", vector.x);
+            _animator.SetFloat(_forwardAnimationHash, vector.z);
+            _animator.SetFloat(_rightAnimationHash, vector.x);
         }
 
         public void Tick()

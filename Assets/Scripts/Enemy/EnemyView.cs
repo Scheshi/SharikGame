@@ -19,14 +19,7 @@ namespace SharikGame
 
         private void Awake()
         {
-            if(_model.Damage > 0)
-            {
-                _controller = new EnemyController(_model, gameObject);
-            }
-            else
-            {
-                _controller = new EnemyController(gameObject);
-            }
+           _controller = new EnemyController(_model, gameObject);
         }
 
         #endregion
