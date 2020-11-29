@@ -1,4 +1,8 @@
-﻿public struct PlayerModel
+﻿using System;
+
+
+[Serializable]
+public struct PlayerModel
 {
     public float HealthPoints;
     public float Speed;

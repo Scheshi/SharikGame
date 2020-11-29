@@ -1,40 +1,60 @@
 ﻿using UnityEngine;
-using System;
 
-public class PlayerView : MonoBehaviour, IUpdatable, IFixedUpdatable
+
+namespace SharikGame
 {
-    [SerializeField] private float _speed = 0.3f;
-    [SerializeField] private float _health = 100.0f;
-    [SerializeField] private float _forceJump = 2.0f;
-    private PlayerController _controller;
-    private Animator _animator;
-    private bool _isGround;
-
-
-    private void Awake()
+    public class PlayerView : MonoBehaviour, IUpdatable, IFixedUpdatable
     {
-        _controller = new PlayerController(_speed, _health, _forceJump, gameObject);
-    }
+        #region Fields
 
-    private void Start()
-    {
-        _animator = GetComponent<Animator>();
-        _controller.Movement += AnimationMove;
-    }
+        [SerializeField] private PlayerModel _model;
+        private PlayerController _controller;
+        private Animator _animator;
 
-    private void AnimationMove(Vector3 vector)
-    {
-        _animator.SetFloat("Forward", vector.z);
-        _animator.SetFloat("Right", vector.x);
-    }
+        #endregion
 
-    public void Tick()
-    {
-        _controller.Tick();
-    }
 
-    public void FixedTick()
-    {
-        _controller.FixedTick();
+        #region UnityMethods
+
+        private void Awake()
+        {
+            if (_model.HealthPoints > 0)
+            {
+                _controller = new PlayerController(_model, gameObject);
+            }
+            else
+            {
+                _controller = new PlayerController(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            _animator = GetComponent<Animator>();
+            _controller.Movement += AnimationMove;
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        private void AnimationMove(Vector3 vector)
+        {
+            _animator.SetFloat("Forward", vector.z);
+            _animator.SetFloat("Right", vector.x);
+        }
+
+        public void Tick()
+        {
+            _controller.Tick();
+        }
+
+        public void FixedTick()
+        {
+            _controller.FixedTick();
+        }
+
+        #endregion
     }
 }
