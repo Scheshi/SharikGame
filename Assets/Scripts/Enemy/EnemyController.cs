@@ -21,18 +21,7 @@ namespace SharikGame
             _enemyTransform = enemy.transform;
 
             enemy.TryGetComponent(out _enemyRigidbody);
-            if (model.Speed <= 0)
-            {
-                model = new EnemyModel
-                {
-                    Damage = 0.5f,
-                    Speed = 1.5f
-                };
-            }
-            else
-            {
-                _model = model;
-            }
+            _model = model;
         }
 
         #endregion
@@ -48,7 +37,6 @@ namespace SharikGame
 
         public void Tick()
         {
-            //Не знаю, нафига. Ну да ладно.
             Collider[] hits = Physics.OverlapSphere(_enemyTransform.position, 5.0f);
                 foreach (var obj in hits)
                 {
