@@ -39,8 +39,19 @@ namespace SharikGame
 
         private void Start()
         {
-            var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
-            var playerView = player.GetComponent<PlayerView>();
+            GameObject player = null;
+            try
+            {
+                player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
+            }
+            catch(UnassignedReferenceException)
+            {
+                string objName = String.Empty;
+                if (_playerPrefab == null) objName = "'Player Prefab'";
+                else if (_startPoint == null) objName = "'Start Point'";
+                throw new UnassignedReferenceException("Отсутствует объект " + objName + " в GameManager");
+            }
+                var playerView = player.GetComponent<PlayerView>();
             _playerTrasform = player.transform;
             _updatables.Add(playerView);
             _fixedUpdatables.Add(playerView);

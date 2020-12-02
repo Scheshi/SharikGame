@@ -34,10 +34,17 @@ namespace SharikGame
                         _distance * _distance)
                     {
                         EnemyView enemyView = null;
-                        GameObject.Instantiate
-                            (_enemyObject, point.position, Quaternion.identity)
-                            .TryGetComponent(out enemyView);
-
+                        GameObject enemy = null;
+                        try
+                        {
+                            GameObject.Instantiate
+                                (_enemyObject, point.position, Quaternion.identity)
+                                .TryGetComponent(out enemyView);
+                        }
+                        catch (UnassignedReferenceException)
+                        {
+                            throw new UnassignedReferenceException("Отсутствует префаб врага в GameManager");
+                        }
                         _manager.AddingUpdatable(enemyView);
                         _manager.AddingFixedUpdatable(enemyView);
                         _enemySpawnPoints.Remove(point);
