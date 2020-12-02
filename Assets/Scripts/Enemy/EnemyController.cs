@@ -50,6 +50,18 @@ namespace SharikGame
                 }
         }
 
+        public void Damage(GameObject obj)
+        {
+            PlayerView playerView;
+            if(obj.TryGetComponent(out playerView))
+            {
+                playerView.Model.Adjust(
+                    new PlayerStruct
+                    {
+                        LifeCount = -_model.Damage
+                    });
+            }
+        }
         #endregion
     }
 }

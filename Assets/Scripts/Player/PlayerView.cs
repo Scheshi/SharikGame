@@ -8,7 +8,7 @@ namespace SharikGame
     {
         #region Fields
 
-        [SerializeField] private PlayerModel _model;
+        [SerializeField] private PlayerStruct _playerStruct;
         private PlayerController _controller;
         private Animator _animator;
 
@@ -18,21 +18,35 @@ namespace SharikGame
         #endregion
 
 
+        #region Properties
+
+        public PlayerModel Model
+        {
+            get
+            {
+                return _controller.Model;
+            }
+        }
+
+        #endregion
+
+
         #region UnityMethods
 
         private void Awake()
         {
-                _controller = new PlayerController(_model, gameObject);
+            var playerModel = new PlayerModel(_playerStruct);
+            _controller = new PlayerController(playerModel, gameObject);
         }
 
         private void OnEnable()
         {
-            PlayerAdjust.Death += Dispose;
+            GameOverChecker.EndGame += Dispose;
         }
 
         private void OnDisable()
         {
-            PlayerAdjust.Death -= Dispose;
+            GameOverChecker.EndGame -= Dispose;
         }
 
         private void Start()
@@ -52,8 +66,8 @@ namespace SharikGame
             var vector = 
                 new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             _controller.CheckMove(vector);
-            _animator.SetFloat(_forwardAnimationHash, vector.z);
-            _animator.SetFloat(_rightAnimationHash, vector.x);
+            //_animator.SetFloat(_forwardAnimationHash, vector.z);
+            //_animator.SetFloat(_rightAnimationHash, vector.x);
         }
 
         public void Tick()

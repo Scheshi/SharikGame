@@ -224,9 +224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f164b4e1e886b4283be1b5dfc0cac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _model:
-    HealthPoints: 100
-    Speed: 1.3
+  _playerStruct:
+    LifeCount: 3
+    Speed: 1.5
     ForceJump: 2
 --- !u!54 &5832518814009919583
 Rigidbody:

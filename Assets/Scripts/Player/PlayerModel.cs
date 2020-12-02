@@ -1,5 +1,5 @@
 ﻿using System;
-
+using UnityEngine;
 
 namespace SharikGame {
     public class PlayerModel
@@ -8,7 +8,7 @@ namespace SharikGame {
 
         public PlayerModel(PlayerStruct str)
         {
-            if (str.LifeCount >= 0 || str.Speed <= 0 || str.ForceJump < 0)
+            if (str.LifeCount <= 0 || str.Speed <= 0 || str.ForceJump < 0)
             {
                 throw new ArgumentException("Неверные значения в данных игрока");
             }
@@ -39,6 +39,10 @@ namespace SharikGame {
             }
         }
 
+        /// <summary>
+        /// Прибавляет переданную структуру к имеющейся
+        /// </summary>
+        /// <param name="plusingStruct">Структура для добавления к имеющейся</param>
         public void Adjust(PlayerStruct plusingStruct)
         {
             _struct = new PlayerStruct
@@ -47,6 +51,11 @@ namespace SharikGame {
                 Speed = _struct.Speed + plusingStruct.Speed,
                 ForceJump = _struct.ForceJump + plusingStruct.ForceJump
             };
+            Debug.Log(LifeCount);
+            if(LifeCount <= 0)
+            {
+                GameOverChecker.GameOver(true);
+            }
         }
     }
 }

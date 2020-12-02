@@ -7,7 +7,7 @@ namespace SharikGame
     {
         #region Fields
 
-        [SerializeField] private EnemyModel _model;
+        [SerializeField] private EnemyStruct _enemyStruct;
         private EnemyController _controller;
 
         
@@ -19,7 +19,8 @@ namespace SharikGame
 
         private void Awake()
         {
-           _controller = new EnemyController(_model, gameObject);
+            var enemyModel = new EnemyModel(_enemyStruct);
+           _controller = new EnemyController(enemyModel, gameObject);
         }
 
         #endregion
@@ -37,6 +38,10 @@ namespace SharikGame
             _controller.Tick();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            _controller.Damage(collision.gameObject);
+        }
         #endregion
     }
 }

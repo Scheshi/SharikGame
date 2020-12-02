@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 namespace SharikGame
@@ -23,10 +24,9 @@ namespace SharikGame
             _manager = manager;
         }
 
-
         public void Tick()
         {
-            if (_enemySpawnPoints.Count > 0)
+            if (_enemySpawnPoints.Count > 0 || _playerTransform != null)
             {
                 foreach (var point in _enemySpawnPoints)
                 {

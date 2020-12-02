@@ -7,10 +7,10 @@ namespace SharikGame
 {
     public class AddingBonus : Bonus
     {
-        [SerializeField] private PlayerModel _plusingModel;
+        [SerializeField] private PlayerStruct _plusingModel;
         protected override void Interaction(PlayerView playerView)
         {
-            PlayerAdjust.Adjust(_plusingModel);
+            playerView.Model.Adjust(_plusingModel);
         }
     }
 }

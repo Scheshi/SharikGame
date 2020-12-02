@@ -8,7 +8,7 @@ namespace SharikGame
     {
         #region Fields
 
-        public PlayerModel _model;
+        public PlayerModel Model;
         private Rigidbody _rigidbody;
         private Vector3 _movement;
 
@@ -19,15 +19,8 @@ namespace SharikGame
 
         public PlayerController(PlayerModel model, GameObject player)
         {
-            if(model.HealthPoints <= 0 || model.Speed <= 0)
-            model = new PlayerModel
-            {
-                HealthPoints = 100.0f,
-                Speed = 2.0f
-            };
-            _model = model;
+            Model = model;
             _rigidbody = player.GetComponent<Rigidbody>();
-            PlayerAdjust.Initialize(this);
         }
 
         #endregion
@@ -42,7 +35,7 @@ namespace SharikGame
 
         public void FixedTick()
         {
-            _movement *= _model.Speed;
+            _movement *= Model.Speed;
             _movement.y = _rigidbody.velocity.y;
             _rigidbody.velocity = _movement;
             

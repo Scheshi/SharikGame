@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -27,7 +28,7 @@ namespace SharikGame
         private List<IFixedUpdatable> _newFixedUpdatables = new List<IFixedUpdatable>();
 
 
-        private Transform _player;
+        private Transform _playerTrasform;
         private TextPoints _pointsText;
         private int _maxPoints;
 
@@ -36,17 +37,16 @@ namespace SharikGame
 
         #region UnityMethods
 
-
         private void Start()
         {
             var player = Instantiate(_playerPrefab, _startPoint.position, Quaternion.identity);
             var playerView = player.GetComponent<PlayerView>();
-            _player = player.transform;
+            _playerTrasform = player.transform;
             _updatables.Add(playerView);
             _fixedUpdatables.Add(playerView);
 
             _updatables.Add
-                (new EnemyWather(_enemySpawnPoints, _player,
+                (new EnemyWather(_enemySpawnPoints, _playerTrasform,
                 _distancePlayerForSpawnEnemy, _enemyPrefab, this));
 
             GameOverChecker.Initialize(_gameOverUI);
@@ -64,7 +64,7 @@ namespace SharikGame
             }
 
             _updatables.Add
-                (new CameraController(_player, _cameraLocalPositionFromPlayer));
+                (new CameraController(_playerTrasform, _cameraLocalPositionFromPlayer));
         }
 
 
