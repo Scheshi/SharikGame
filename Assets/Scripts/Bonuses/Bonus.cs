@@ -8,6 +8,7 @@ namespace SharikGame {
         protected IView _slider;
         protected IView _text;
 
+
         public void Dispose()
         {
             Destroy(gameObject);
@@ -28,6 +29,7 @@ namespace SharikGame {
             {
                 Interaction(playerView);
                 Dispose();
+
             }
         }
 

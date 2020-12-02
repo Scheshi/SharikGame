@@ -27,7 +27,7 @@ namespace SharikGame
         private List<IUpdatable> _newUpdatables = new List<IUpdatable>();
         private List<IFixedUpdatable> _newFixedUpdatables = new List<IFixedUpdatable>();
 
-
+        private CameraController _cameraController;
         private Transform _playerTrasform;
         private TextPoints _pointsText;
         private int _maxPoints;
@@ -74,8 +74,9 @@ namespace SharikGame
                 obj.Initialize(slider, _pointsText);
             }
 
-            _updatables.Add
-                (new CameraController(_playerTrasform, _cameraLocalPositionFromPlayer));
+            _cameraController = 
+                new CameraController(_playerTrasform, _cameraLocalPositionFromPlayer);
+            _updatables.Add(_cameraController);
         }
 
 

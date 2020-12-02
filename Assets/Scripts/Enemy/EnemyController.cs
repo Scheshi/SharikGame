@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 namespace SharikGame
@@ -7,6 +8,7 @@ namespace SharikGame
     {
         #region Fields
 
+        public event Action Hit;
         private Transform _enemyTransform;
         private Rigidbody _enemyRigidbody;
         private Vector3 _target;
@@ -52,6 +54,7 @@ namespace SharikGame
 
         public void Damage(GameObject obj)
         {
+
             PlayerView playerView;
             if(obj.TryGetComponent(out playerView))
             {
@@ -61,6 +64,7 @@ namespace SharikGame
                         LifeCount = -_model.Damage
                     });
             }
+            Hit?.Invoke();
         }
         #endregion
     }
