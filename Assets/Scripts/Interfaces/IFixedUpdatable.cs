@@ -1,7 +1,7 @@
 ﻿namespace SharikGame
 {
-    public interface IFixedUpdatable
+    public interface IFixedUpdatable : IUpdatable
     {
-        void FixedTick();
+        void FixedUpdateTick();
     }
 }

@@ -1,43 +1,24 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace SharikGame
 {
-    public class CameraController : IUpdatable
+    public class CameraController : ILateUpdatable
     {
-        #region Fields
-
+        private Transform _playerTransform;
+        private Vector3 _offset;
         private Camera _main;
-        private Transform _player;
-        private Vector3 _position;
-        private Quaternion _originalRotation;
-        private float _shakePower = 2.0f;
-
-        #endregion
-
-
-        #region Contructors
-
-        public CameraController(Transform playerTransform, Vector3 cameraLocalPosition)
+        public CameraController(Transform playerTransform)
         {
-            _player = playerTransform;
-            _position = cameraLocalPosition;
+            _playerTransform = playerTransform;
             _main = Camera.main;
-            _originalRotation = _main.transform.rotation;
+            _offset = _main.transform.position - _playerTransform.position;
         }
 
-        #endregion
-
-
-        #region Methods
-
-        public void Tick()
+        public void LateUpdateTick()
         {
-            _main.transform.position = _player.position + _position;
-            _main.transform.LookAt(_player);
+            _main.transform.position = _playerTransform.position + _offset;
+            _main.transform.LookAt(_playerTransform.position);
         }
-
-        #endregion
     }
 }

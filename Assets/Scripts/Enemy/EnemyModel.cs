@@ -1,28 +1,24 @@
 ﻿using System;
 
 
-namespace SharikGame
-{
-    public class EnemyModel
+namespace SharikGame {
+    public class EnemyModel : IModel
     {
-        private EnemyStruct _struct;
-        public EnemyModel(EnemyStruct str)
+        private EnemyStruct _enemyStruct;
+
+        public EnemyModel(EnemyStruct @struct)
         {
-            if(str.Damage < 0 || str.Speed <= 0)
-            {
-                throw new ArgumentException("Неверные значения в данных противника");
-            }
-            else
-            {
-                _struct = str;
-            }
+            if (@struct.Speed <= 0 || @struct.Damage <= 0)
+                throw new ArgumentException("Неверные значения в структуре игрока");
+
+            _enemyStruct = @struct;
         }
 
         public int Damage
         {
             get
             {
-                return _struct.Damage;
+                return _enemyStruct.Damage;
             }
         }
 
@@ -30,9 +26,8 @@ namespace SharikGame
         {
             get
             {
-                return _struct.Speed;
+                return _enemyStruct.Speed;
             }
         }
-
     }
 }

@@ -1,71 +1,37 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace SharikGame
 {
-    public class EnemyController : IUpdatable, IFixedUpdatable
+    public class EnemyController : ControllerFabric, IFrameUpdatable
     {
-        #region Fields
-
-        public event Action Hit;
-        private Transform _enemyTransform;
-        private Rigidbody _enemyRigidbody;
-        private Vector3 _target;
+        private Transform _transform;
         private EnemyModel _model;
+        private float _radiusForCheck = 5.0f;
 
-        #endregion
-
-
-        #region Contructors
-        public EnemyController(EnemyModel model, GameObject enemy)
+        public EnemyController(IModel model, GameObject go) : base(model, go)
         {
-            _enemyTransform = enemy.transform;
-
-            enemy.TryGetComponent(out _enemyRigidbody);
-            _model = model;
+            ControllersUpdater.AddUpdate(this);
+            _transform = go.transform;
+            _model = model as EnemyModel;
         }
 
-        #endregion
-
-
-        #region Methods
-
-        public void FixedTick()
+        public void UpdateTick()
         {
-                var vectorMovement = (_target - _enemyTransform.position).normalized;
-                _enemyRigidbody.velocity = vectorMovement * _model.Speed;
-        }
-
-        public void Tick()
-        {
-            Collider[] hits = Physics.OverlapSphere(_enemyTransform.position, 5.0f);
-                foreach (var obj in hits)
+            Collider[] hits = Physics.OverlapSphere(_transform.position, _radiusForCheck);
+            if(hits.Length > 0)
+            {
+                foreach(var hit in hits)
                 {
-                    PlayerView playerView;
-                    obj.TryGetComponent(out playerView);
-                    if (playerView != null)
+                    if(hit.gameObject == ServiceLocator.GetDepencity<GameObject>())
                     {
-                        _target = obj.transform.position;
-                        break;
+                        if ((hit.transform.position - _transform.position).sqrMagnitude <= 1.5f) 
+                            ServiceLocator.GetDepencity<PlayerModel>().Adjust(_model.Damage);
+
+                        Move((hit.transform.position - _transform.position).normalized);
                     }
                 }
-        }
-
-        public void Damage(GameObject obj)
-        {
-
-            PlayerView playerView;
-            if(obj.TryGetComponent(out playerView))
-            {
-                playerView.Model.Adjust(
-                    new PlayerStruct
-                    {
-                        LifeCount = -_model.Damage
-                    });
             }
-            Hit?.Invoke();
         }
-        #endregion
     }
 }

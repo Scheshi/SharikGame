@@ -1,10 +1,12 @@
 ﻿using System;
 
 
-[Serializable]
-public struct PlayerStruct
+namespace SharikGame
 {
-    public int LifeCount;
-    public float Speed;
-    public float ForceJump;
+    [Serializable]
+    public struct PlayerStruct
+    {
+        public int LifeCount;
+        public float Speed;
+    }
 }
