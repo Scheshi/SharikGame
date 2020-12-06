@@ -8,7 +8,7 @@ namespace SharikGame
     {
         private static Dictionary<Type, object> _dictionary = new Dictionary<Type, object>();
 
-        public static void SetDepencity(object obj)
+        public static void SetDependency(object obj)
         {
             var type = obj.GetType();
             if (_dictionary.ContainsKey(type))
@@ -16,7 +16,7 @@ namespace SharikGame
             _dictionary.Add(type, obj);
         }
 
-        public static T GetDepencity<T>()
+        public static T GetDependency<T>()
         {
             var type = typeof(T);
             if (!_dictionary.ContainsKey(type))

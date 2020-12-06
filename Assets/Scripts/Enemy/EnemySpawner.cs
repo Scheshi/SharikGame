@@ -25,7 +25,7 @@ namespace SharikGame {
                 {
                     foreach (var hit in hits)
                     {
-                        if (hit.gameObject == ServiceLocator.GetDepencity<GameObject>())
+                        if (hit.gameObject == ServiceLocator.GetDependency<GameObject>())
                         {
                             var enemy = GameObject.Instantiate(_data.gameObject, _pointsForSpawn[i].position, Quaternion.identity);
                             var model = new EnemyModel(_data.EnemyStruct);

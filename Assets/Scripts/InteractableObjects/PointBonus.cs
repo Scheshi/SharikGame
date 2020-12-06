@@ -8,10 +8,10 @@ namespace SharikGame
         private SliderController _sliderController;
         public PointBonus(GameObject gameObject) : base(gameObject)
         {
-            _sliderController = ServiceLocator.GetDepencity<SliderController>();
+            _sliderController = ServiceLocator.GetDependency<SliderController>();
         }
 
-        public override void Interacte()
+        public override void Interact()
         {
             _sliderController.ChangeValue();
         }

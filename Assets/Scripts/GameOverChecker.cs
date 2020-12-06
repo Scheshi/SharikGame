@@ -17,7 +17,7 @@ namespace SharikGame {
         {
             Time.timeScale = isEnd ? 0.0f : 1.0f;
             _overUI.SetActive(isEnd);
-            var message = isWin ? "Вы выйграли" : "Вы проиграли";
+            var message = isWin ? "Вы выиграли" : "Вы проиграли";
             _overUI.GetComponentInChildren<Text>().text = message;
         }
 
@@ -25,7 +25,7 @@ namespace SharikGame {
         {
             _currentValue++;
             Debug.Log(_currentValue);
-            if (_currentValue >= ServiceLocator.GetDepencity<SliderController>().MaxValue)
+            if (_currentValue >= ServiceLocator.GetDependency<SliderController>().MaxValue)
                 GameEnd(true, true);
     }
     }

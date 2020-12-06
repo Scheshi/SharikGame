@@ -17,16 +17,19 @@ namespace SharikGame
 
         void Start()
         {
+            GameObject updaterGO = new GameObject("Updater");
+            updaterGO.AddComponent<ControllersUpdater>();
+
             var gameOverChecker = new GameOverChecker(_uiGameOver);
             new ButtonReloaderView(_uiGameOver.GetComponentInChildren<Button>());
-            ServiceLocator.SetDepencity(gameOverChecker);
+            ServiceLocator.SetDependency(gameOverChecker);
             gameOverChecker.GameEnd(false, false);
             new PlayerInizializator(_playerData, _startPoint);
-            var camera = new CameraController(ServiceLocator.GetDepencity<GameObject>().transform);
+            var camera = new CameraController(ServiceLocator.GetDependency<GameObject>().transform);
             ControllersUpdater.AddUpdate(camera);
             _sliderUI.maxValue = _interactiveObjects.Length;
             var slider = new SliderController(_sliderUI);
-            ServiceLocator.SetDepencity(slider);
+            ServiceLocator.SetDependency(slider);
             
 
             foreach(var obj in _interactiveObjects)
@@ -35,7 +38,7 @@ namespace SharikGame
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);
 
-
+            Destroy(gameObject);
         }
     }
 }

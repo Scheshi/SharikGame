@@ -15,34 +15,22 @@ namespace SharikGame
             _playerStruct = @struct;
         }
 
-        public float Speed
-        {
-            get
-            {
-                return _playerStruct.Speed;
-            }
-        }
+        public float Speed => _playerStruct.Speed;
 
-        public int LifeCount
-        {
-            get
-            {
-                return _playerStruct.LifeCount;
-            }
-        }
+        public int LifeCount => _playerStruct.LifeCount;
 
 
         /// <summary>
         /// Урон игрока
         /// </summary>
         /// <param name="count">Сколько снять жизней</param>
-        public void Adjust(int count)
+        public void PlayerDamage(int count)
         {
             _playerStruct.LifeCount -= count;
 
             if(_playerStruct.LifeCount <= 0)
             {
-                ServiceLocator.GetDepencity<GameOverChecker>().GameEnd(true, false);
+                ServiceLocator.GetDependency<GameOverChecker>().GameEnd(true, false);
             }
         }
 
@@ -51,7 +39,7 @@ namespace SharikGame
         /// Изменение скорости игрока
         /// </summary>
         /// <param name="count">Сколько добавить к скорости</param>
-        public void ChangeSpeed(float count)
+        public void PlusingSpeed(float count)
         {
             _playerStruct.Speed += count;
         }

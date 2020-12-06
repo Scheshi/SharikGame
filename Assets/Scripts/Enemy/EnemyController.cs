@@ -23,10 +23,10 @@ namespace SharikGame
             {
                 foreach(var hit in hits)
                 {
-                    if(hit.gameObject == ServiceLocator.GetDepencity<GameObject>())
+                    if(hit.gameObject == ServiceLocator.GetDependency<GameObject>())
                     {
                         if ((hit.transform.position - _transform.position).sqrMagnitude <= 1.5f) 
-                            ServiceLocator.GetDepencity<PlayerModel>().Adjust(_model.Damage);
+                            ServiceLocator.GetDependency<PlayerModel>().PlayerDamage(_model.Damage);
 
                         Move((hit.transform.position - _transform.position).normalized);
                     }

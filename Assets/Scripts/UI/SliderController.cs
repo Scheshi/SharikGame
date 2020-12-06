@@ -5,18 +5,29 @@ using UnityEngine.UI;
 namespace SharikGame {
     public class SliderController
     {
+        #region Fields
 
         public event Action ChangeValueEvent;
         private Slider _slider;
         private int _currentValue;
+
+        #endregion
+
+
+        #region Constructors
+
         public SliderController(Slider slider)
         {
             _slider = slider;
             _currentValue = 0;
             _slider.value = _currentValue;
-            ChangeValueEvent += ServiceLocator.GetDepencity<GameOverChecker>().AddValue;
+            ChangeValueEvent += ServiceLocator.GetDependency<GameOverChecker>().AddValue;
         }
 
+        #endregion
+
+
+        #region Properties
         public float MaxValue
         {
             get
@@ -25,12 +36,19 @@ namespace SharikGame {
             }
         }
 
+        #endregion
+
+
+        #region Methods
+
         public void ChangeValue()
         {
             _currentValue++;
             _slider.value = _currentValue;
 
             ChangeValueEvent?.Invoke();
-    }
+        }
+
+        #endregion
     }
 }

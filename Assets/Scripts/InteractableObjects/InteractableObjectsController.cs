@@ -21,7 +21,7 @@ namespace SharikGame
             GameObject.Destroy(_gameObject);
         }
 
-        public abstract void Interacte();
+        public abstract void Interact();
 
         public void UpdateTick()
         {
@@ -35,10 +35,10 @@ namespace SharikGame
             {
                 foreach (var hit in hits)
                 {
-                    if (hit.gameObject == ServiceLocator.GetDepencity<GameObject>())
+                    if (hit.gameObject == ServiceLocator.GetDependency<GameObject>())
                     {
                         
-                        Interacte();
+                        Interact();
                         Dispose();
                         break;
                     }

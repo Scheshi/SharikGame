@@ -14,20 +14,8 @@ namespace SharikGame {
             _enemyStruct = @struct;
         }
 
-        public int Damage
-        {
-            get
-            {
-                return _enemyStruct.Damage;
-            }
-        }
+        public int Damage => _enemyStruct.Damage;
 
-        public float Speed
-        {
-            get
-            {
-                return _enemyStruct.Speed;
-            }
-        }
+        public float Speed => _enemyStruct.Speed;
     }
 }

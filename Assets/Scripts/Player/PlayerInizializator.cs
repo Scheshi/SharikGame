@@ -11,8 +11,8 @@ namespace SharikGame
             var playerModel = new PlayerModel(playerData.PlayerStruct);
             var playerController = new PlayerController(playerModel, player);
             var playerView = new PlayerView(playerController, player);
-            ServiceLocator.SetDepencity(player);
-            ServiceLocator.SetDepencity(playerModel);
+            ServiceLocator.SetDependency(player);
+            ServiceLocator.SetDependency(playerModel);
             ControllersUpdater.AddUpdate(playerView);
         }
     }
