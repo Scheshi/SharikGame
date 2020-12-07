@@ -1,24 +1,32 @@
 ﻿using UnityEngine;
-using System;
+using UnityEngine.UI;
 
 
 namespace SharikGame {
-    public static class GameOverChecker
+    public class GameOverChecker
     {
-        public static event Action EndGame;
-        private static GameObject _ui;
+        private GameObject _overUI;
+        private int _currentValue;
 
-        public static void Initialize(GameObject ui)
+        public GameOverChecker(GameObject ui)
         {
-            _ui = ui;
+            _overUI = ui;
         }
 
-        public static void GameOver(bool isActive)
+        public void GameEnd(bool isEnd, bool isWin)
         {
-            Time.timeScale = isActive ? 0.0f : 1.0f;
-            _ui.SetActive(isActive);
-            if(isActive)
-            EndGame?.Invoke();
+            Time.timeScale = isEnd ? 0.0f : 1.0f;
+            _overUI.SetActive(isEnd);
+            var message = isWin ? "Вы выиграли" : "Вы проиграли";
+            _overUI.GetComponentInChildren<Text>().text = message;
         }
+
+        public void AddValue()
+        {
+            _currentValue++;
+            Debug.Log(_currentValue);
+            if (_currentValue >= ServiceLocator.GetDependency<SliderController>().MaxValue)
+                GameEnd(true, true);
+    }
     }
 }

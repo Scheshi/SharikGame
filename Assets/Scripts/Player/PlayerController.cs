@@ -1,46 +1,35 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 
 namespace SharikGame
 {
-    public class PlayerController : IFixedUpdatable
+    internal class PlayerController : IFixedUpdatable
     {
-        #region Fields
-
-        public PlayerModel Model;
+        private PlayerModel _playerModel;
         private Rigidbody _rigidbody;
-        private Vector3 _movement;
+        private Vector3 _movementVector;
 
-        #endregion
-
-
-        #region Constructors
-
-        public PlayerController(PlayerModel model, GameObject player)
+        public PlayerController(PlayerModel model, GameObject go)
         {
-            Model = model;
-            _rigidbody = player.GetComponent<Rigidbody>();
+            _playerModel = model;
+            if(!go.TryGetComponent(out _rigidbody))
+            {
+                throw new ArgumentException("Невозможно получить объект игрока в PlayerController");
+            }
+            ControllersUpdater.AddUpdate(this);
         }
 
-        #endregion
-
-
-        #region Methods
-
-        public void CheckMove(Vector3 vector)
+        public void FixedUpdateTick()
         {
-            _movement = vector;
+            _movementVector *= _playerModel.Speed;
+            _movementVector.y = _rigidbody.velocity.y;
+            _rigidbody.velocity = _movementVector;
         }
 
-        public void FixedTick()
+        public void Move(Vector3 vector)
         {
-            _movement *= Model.Speed;
-            _movement.y = _rigidbody.velocity.y;
-            _rigidbody.velocity = _movement;
-            
+            _movementVector = vector;
         }
-
-        #endregion
     }
 }

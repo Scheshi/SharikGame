@@ -1,61 +1,47 @@
 ﻿using System;
-using UnityEngine;
 
-namespace SharikGame {
-    public class PlayerModel
+
+namespace SharikGame
+{
+    internal class PlayerModel : IModel
     {
-        private PlayerStruct _struct;
+        private PlayerStruct _playerStruct;
 
-        public PlayerModel(PlayerStruct str)
+        public PlayerModel(PlayerStruct @struct)
         {
-            if (str.LifeCount <= 0 || str.Speed <= 0 || str.ForceJump < 0)
-            {
-                throw new ArgumentException("Неверные значения в данных игрока");
-            }
-            else _struct = str;
+            if (@struct.Speed <= 0 || @struct.LifeCount <= 0) 
+                throw new ArgumentException("Неверные значения в структуре игрока");
+
+            _playerStruct = @struct;
         }
 
-        public int LifeCount
-        {
-            get
-            {
-                return _struct.LifeCount;
-            }
-        }
+        public float Speed => _playerStruct.Speed;
 
-        public float Speed
-        {
-            get
-            {
-                return _struct.Speed;
-            }
-        }
+        public int LifeCount => _playerStruct.LifeCount;
 
-        public float ForceJump
-        {
-            get
-            {
-                return _struct.ForceJump;
-            }
-        }
 
         /// <summary>
-        /// Прибавляет переданную структуру к имеющейся
+        /// Урон игрока
         /// </summary>
-        /// <param name="plusingStruct">Структура для добавления к имеющейся</param>
-        public void Adjust(PlayerStruct plusingStruct)
+        /// <param name="count">Сколько снять жизней</param>
+        public void PlayerDamage(int count)
         {
-            _struct = new PlayerStruct
+            _playerStruct.LifeCount -= count;
+
+            if(_playerStruct.LifeCount <= 0)
             {
-                LifeCount = _struct.LifeCount + plusingStruct.LifeCount,
-                Speed = _struct.Speed + plusingStruct.Speed,
-                ForceJump = _struct.ForceJump + plusingStruct.ForceJump
-            };
-            Debug.Log(LifeCount);
-            if(LifeCount <= 0)
-            {
-                GameOverChecker.GameOver(true);
+                ServiceLocator.GetDependency<GameOverChecker>().GameEnd(true, false);
             }
+        }
+
+
+        /// <summary>
+        /// Изменение скорости игрока
+        /// </summary>
+        /// <param name="count">Сколько добавить к скорости</param>
+        public void PlusingSpeed(float count)
+        {
+            _playerStruct.Speed += count;
         }
     }
 }
