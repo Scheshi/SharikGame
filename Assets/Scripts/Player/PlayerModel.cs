@@ -19,6 +19,7 @@ namespace SharikGame
 
         public int LifeCount => _playerStruct.LifeCount;
 
+        public PlayerStruct Struct => _playerStruct;
 
         /// <summary>
         /// Урон игрока

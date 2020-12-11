@@ -25,6 +25,15 @@ namespace SharikGame
             _controller.Move(vector);
             _animator.SetFloat(_forwardHash, vector.z);
             _animator.SetFloat(_rightHash, vector.x);
+            Save();
+        }
+
+        private void Save()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                _controller.Save();
+            }
         }
 
     }

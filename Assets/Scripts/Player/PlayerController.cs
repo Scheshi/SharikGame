@@ -31,5 +31,13 @@ namespace SharikGame
         {
             _movementVector = vector;
         }
+
+        public void Save()
+        {
+            Transform transform = _rigidbody.gameObject.transform;
+            var data = new PlayerSaveData(_playerModel.Struct, transform.position, transform.rotation);
+            var serializer = new XMLSerializer();
+            serializer.Save(data, Application.dataPath);
+        }
     }
 }
