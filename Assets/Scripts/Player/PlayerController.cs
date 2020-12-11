@@ -39,5 +39,15 @@ namespace SharikGame
             var serializer = new XMLSerializer();
             serializer.Save(data, Application.dataPath);
         }
+
+        public void Load()
+        {
+            Transform transform = _rigidbody.gameObject.transform;
+            var serializer = new XMLSerializer();
+            var data = new PlayerSaveData(serializer.Load<PlayerSaveData>(Application.dataPath));
+            _playerModel = new PlayerModel(data._str);
+            transform.position = data._position;
+            transform.rotation = data._rotation;
+        }
     }
 }

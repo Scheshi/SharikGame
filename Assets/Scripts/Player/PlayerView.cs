@@ -26,6 +26,7 @@ namespace SharikGame
             _animator.SetFloat(_forwardHash, vector.z);
             _animator.SetFloat(_rightHash, vector.x);
             Save();
+            Load();
         }
 
         private void Save()
@@ -33,6 +34,14 @@ namespace SharikGame
             if (Input.GetKeyDown(KeyCode.E))
             {
                 _controller.Save();
+            }
+        }
+
+        private void Load()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _controller.Load();
             }
         }
 

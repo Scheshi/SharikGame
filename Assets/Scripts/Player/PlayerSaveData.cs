@@ -9,6 +9,18 @@ namespace SharikGame {
         public QuaternionSerializable _rotation;
         public PlayerStruct _str;
 
+        public PlayerSaveData()
+        {
+            return;
+        }
+
+        public PlayerSaveData(PlayerSaveData data)
+        {
+            _position = data._position;
+            _rotation = data._rotation;
+            _str = data._str;
+        }
+
         public PlayerSaveData(PlayerStruct str, Vector3Serializable position, QuaternionSerializable rotation)
         {
             _position = position;
