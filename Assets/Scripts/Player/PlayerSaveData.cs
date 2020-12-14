@@ -8,6 +8,7 @@ namespace SharikGame {
         public Vector3Serializable Position;
         public QuaternionSerializable Rotation;
         public PlayerStruct PlayerStruct;
+
         private Transform _playerTransform;
         private PlayerModel _model;
 
@@ -20,8 +21,14 @@ namespace SharikGame {
         {
             _playerTransform = transform;
             _model = model;
-            //ServiceLocator.GetDependency<Repository>().Saved += FromSave;
-            ServiceLocator.GetDependency<Repository>().Saved += FromSave;
+            PlayerStruct = new PlayerStruct()
+            {
+                LifeCount = _model.LifeCount,
+                Speed = _model.Speed
+            };
+            Position = transform.position;
+            Rotation = transform.rotation;
+
         }
 
         public PlayerSaveData(PlayerSaveData data)
@@ -39,14 +46,15 @@ namespace SharikGame {
                 LifeCount = _model.LifeCount,
                 Speed = _model.Speed
             };
-            Debug.Log($"{PlayerStruct.LifeCount} + {PlayerStruct.Speed}");
             Position = _playerTransform.position;
             Rotation = _playerTransform.rotation;
         }
 
         public void FromLoad()
         {
-            new PlayerInizializator(PlayerStruct, Position, Rotation);
+            ServiceLocator.GetDependency<Repository>().RemoveDataFromList(typeof(PlayerSaveData));
+            Debug.Log(PlayerStruct.LifeCount);
+            new PlayerInizializator(this);
         }
     }
 

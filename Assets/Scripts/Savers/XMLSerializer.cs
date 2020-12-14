@@ -37,7 +37,7 @@ namespace SharikGame
             {
                 serializer.Serialize(stream, data);
                 stream.Close();
-                Debug.Log($"Объект сериализован в тип {this.GetType()} по пути {path}");
+                //Debug.Log($"Объект сериализован в тип {this.GetType()} по пути {path}");
             }
         }
     }

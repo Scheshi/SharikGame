@@ -9,7 +9,7 @@ namespace SharikGame {
         #region Fields
 
         public event Action Saved;
-        public event Action<IData> Loaded;
+        public event Action Loaded;
         private List<IData> _datas = new List<IData>();
         private readonly string _folderPath = Application.dataPath + "/dataSaves/";
         private ISaver _saver;
@@ -40,8 +40,10 @@ namespace SharikGame {
 
         public void AddDataToList(IData item)
         {
+            Debug.Log("Добавление " + item.GetType().Name + " в список");
             _datas.Add(item);
-            Saved += item.FromSave; 
+            Saved += item.FromSave;
+            Loaded += item.FromLoad;
         }
 
         public void RemoveDataFromList(Type type)
@@ -53,6 +55,7 @@ namespace SharikGame {
                 == null) 
                 return;
             _datas.Remove(data);
+            Debug.Log("Удаление" + type + " из списка");
         }
 
         public void RemoveDataFromList(int index)
@@ -71,21 +74,19 @@ namespace SharikGame {
 
         public void Load()
         {
-            for(int i = 0; i<_datas.Count; i++)
+            Debug.Log("Общее кол-во объектов в списке: " + _datas.Count);
+            foreach(var data in _datas)
             {
-                
-                Debug.Log($"Загружается {_datas[i].GetType().Name}\n" +
-                    $"Загружено на {((float)i / _datas.Count) * 100}%");
+                Debug.Log($"Загружается {data.GetType().Name}\n");
 
-                if(ServiceLocator.IsHas(_datas[i].GetType())) 
-                    ServiceLocator.RemoveDependency(_datas.Count);
+                if (ServiceLocator.IsHas(data.GetType()) && data.GetType() != typeof(PlayerSaveData)) 
+                    ServiceLocator.RemoveDependency(data);
 
-                if (_datas[i] is IUpdatable) ControllersUpdater.RemoveUpdate((IUpdatable)_datas[i]);
-
-                var data = _datas[i];
-                _saver.Load(ref data, _folderPath);
-                data.FromLoad();
+                if (data is IUpdatable) ControllersUpdater.RemoveUpdate((IUpdatable)data);
+                var item = data;
+                _saver.Load(ref item, _folderPath);
             }
+            Loaded.Invoke();
         }
 
         #endregion

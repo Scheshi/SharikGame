@@ -20,29 +20,49 @@ namespace SharikGame
             Initialize();
         }
 
-        public PlayerInizializator(PlayerStruct str, Vector3 position, Quaternion rotation)
+        public PlayerInizializator(PlayerSaveData data)
         {
-            _gameObject = Resources.Load<GameObject>("Prefabs/Player");
-            _struct = str;
-            _startPosition = position;
-            _startRotation = rotation;
+            if (ServiceLocator.IsHas<PlayerSaveData>())
+            {
+                ServiceLocator.RemoveDependency<PlayerSaveData>();
+                ServiceLocator.SetDependency(data);
+            }
+                _gameObject = Resources.Load<GameObject>("Prefabs/Player");
+            _struct = data.PlayerStruct;
+            _startPosition = data.Position;
+            _startRotation = data.Rotation;
             Initialize();
         }
 
 
         public void Initialize()
         {
+            if (ServiceLocator.IsHas<CameraController>())
+            {
+                var oldCamera = ServiceLocator.GetDependency<CameraController>();
+                ControllersUpdater.RemoveUpdate(oldCamera);
+                ServiceLocator.RemoveDependency<CameraController>();
+
+            }
             if (ServiceLocator.IsHas<GameObject>())
             {
+                var oldPlayer = ServiceLocator.GetDependency<GameObject>();
                 ServiceLocator.RemoveDependency<PlayerModel>();
                 ServiceLocator.RemoveDependency<GameObject>();
+                ServiceLocator.RemoveDependency<PlayerView>();
+                GameObject.Destroy(oldPlayer);
             }
             var player = GameObject.Instantiate(_gameObject, _startPosition, _startRotation);
             var playerModel = new PlayerModel(_struct);
             var playerController = new PlayerController(playerModel, player);
             var playerView = new PlayerView(playerController, player);
-            ServiceLocator.GetDependency<Repository>().
-                AddDataToList(new PlayerSaveData(playerModel, player.transform));
+            if (!ServiceLocator.IsHas<PlayerSaveData>())
+            {
+                var saveData = new PlayerSaveData(playerModel, player.transform);
+                ServiceLocator.SetDependency(saveData);
+                ServiceLocator.GetDependency<Repository>().
+                AddDataToList(saveData);
+            }
             //Repository.AddDataToList(new PlayerSaveData(playerModel, player.transform));
             ServiceLocator.SetDependency(player);
             ServiceLocator.SetDependency(playerModel);
@@ -50,13 +70,6 @@ namespace SharikGame
             {
                 ServiceLocator.SetDependency(playerView);
                 ControllersUpdater.AddUpdate(playerView);
-            }
-            if (ServiceLocator.IsHas<CameraController>())
-            {
-                var oldCamera = ServiceLocator.GetDependency<CameraController>();
-                ControllersUpdater.RemoveUpdate(oldCamera);
-                ServiceLocator.RemoveDependency<CameraController>();
-                
             }
             var camera = new CameraController(ServiceLocator.GetDependency<GameObject>().transform);
             ControllersUpdater.AddUpdate(camera);
