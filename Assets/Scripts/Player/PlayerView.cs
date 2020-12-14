@@ -25,25 +25,8 @@ namespace SharikGame
             _controller.Move(vector);
             _animator.SetFloat(_forwardHash, vector.z);
             _animator.SetFloat(_rightHash, vector.x);
-            Save();
-            Load();
+            if (Input.GetKeyDown(KeyCode.R)) ServiceLocator.GetDependency<Repository>().Save();
+            if (Input.GetKeyDown(KeyCode.T)) ServiceLocator.GetDependency<Repository>().Load();
         }
-
-        private void Save()
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                _controller.Save();
-            }
-        }
-
-        private void Load()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                _controller.Load();
-            }
-        }
-
     }
 }

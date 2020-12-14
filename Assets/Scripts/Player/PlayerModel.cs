@@ -3,7 +3,7 @@
 
 namespace SharikGame
 {
-    internal class PlayerModel : IModel
+    public class PlayerModel : IModel
     {
         private PlayerStruct _playerStruct;
 

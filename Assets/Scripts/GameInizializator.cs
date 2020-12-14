@@ -17,6 +17,8 @@ namespace SharikGame
 
         void Start()
         {
+            var repository = new Repository();
+            ServiceLocator.SetDependency(repository);
             GameObject updaterGO = new GameObject("Updater");
             updaterGO.AddComponent<ControllersUpdater>();
 
@@ -25,16 +27,18 @@ namespace SharikGame
             ServiceLocator.SetDependency(gameOverChecker);
             gameOverChecker.GameEnd(false, false);
             new PlayerInizializator(_playerData, _startPoint);
-            var camera = new CameraController(ServiceLocator.GetDependency<GameObject>().transform);
-            ControllersUpdater.AddUpdate(camera);
             _sliderUI.maxValue = _interactiveObjects.Length;
             var slider = new SliderController(_sliderUI);
             ServiceLocator.SetDependency(slider);
-            
+
+            //ServiceLocator.GetDependency<Repository>().AddDataToList(slider);
+            repository.AddDataToList(slider);
+
 
             foreach(var obj in _interactiveObjects)
             {
                 new PointBonus(obj);
+
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);
 

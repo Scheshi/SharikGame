@@ -5,19 +5,19 @@ using UnityEngine;
 
 namespace SharikGame
 {
-    public class XMLSerializer : ISaver<IData>
+    public class XMLSerializer : ISaver
     {
-        public IData Load<IData>(string path = null)
-        {
+        public void Load(ref IData data, string path = null)
+        { 
+            
             if (path == null) throw new ArgumentException("Неверные значения пути для загрузки данных в " + this.GetType());
-            var type = typeof(IData);
+            var type = data.GetType();
+            Debug.Log(type.Name);
             XmlSerializer serializer = new XmlSerializer(type);
             using (FileStream stream = new FileStream($"{path}/{type.Name}.save", FileMode.Open))
             {
-                var data = serializer.Deserialize(stream);
+                data = (IData)serializer.Deserialize(stream);
                 stream.Close();
-                Debug.Log($"Объект {type.Name} десериализован");
-                return (IData)data;
             }
 
 
@@ -33,7 +33,7 @@ namespace SharikGame
             {
                 serializer.Serialize(stream, data);
                 stream.Close();
-                Debug.Log($"Объект сериализован в тип {this.GetType()} по пути {path}");
+                //Debug.Log($"Объект сериализован в тип {this.GetType()} по пути {path}");
             }
         }
     }

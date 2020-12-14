@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<PlayerSaveData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Position>
+    <x>5.69778156</x>
+    <y>0.499999583</y>
+    <z>-14.3280859</z>
+  </Position>
+  <Rotation>
+    <x>-0.1222201</x>
+    <y>-0.0165217817</y>
+    <z>0.117403507</z>
+    <w>0.985396266</w>
+  </Rotation>
+  <PlayerStruct>
+    <LifeCount>3</LifeCount>
+    <Speed>1.6</Speed>
+  </PlayerStruct>
+</PlayerSaveData>

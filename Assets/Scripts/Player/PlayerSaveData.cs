@@ -5,27 +5,48 @@ namespace SharikGame {
     [Serializable]
     public class PlayerSaveData : IData
     {
-        public Vector3Serializable _position;
-        public QuaternionSerializable _rotation;
-        public PlayerStruct _str;
+        public Vector3Serializable Position;
+        public QuaternionSerializable Rotation;
+        public PlayerStruct PlayerStruct;
+        private Transform _playerTransform;
+        private PlayerModel _model;
 
         public PlayerSaveData()
         {
             return;
         }
 
-        public PlayerSaveData(PlayerSaveData data)
+        public PlayerSaveData(PlayerModel model, Transform transform)
         {
-            _position = data._position;
-            _rotation = data._rotation;
-            _str = data._str;
+            _playerTransform = transform;
+            _model = model;
+            //ServiceLocator.GetDependency<Repository>().Saved += FromSave;
+            ServiceLocator.GetDependency<Repository>().Saved += FromSave;
         }
 
-        public PlayerSaveData(PlayerStruct str, Vector3Serializable position, QuaternionSerializable rotation)
+        public PlayerSaveData(PlayerSaveData data)
         {
-            _position = position;
-            _rotation = rotation;
-            _str = str;
+            Position = data.Position;
+            Rotation = data.Rotation;
+            PlayerStruct = data.PlayerStruct;
+        }
+
+
+        public void FromSave()
+        {
+            PlayerStruct = new PlayerStruct()
+            {
+                LifeCount = _model.LifeCount,
+                Speed = _model.Speed
+            };
+            Debug.Log($"{PlayerStruct.LifeCount} + {PlayerStruct.Speed}");
+            Position = _playerTransform.position;
+            Rotation = _playerTransform.rotation;
+        }
+
+        public void FromLoad()
+        {
+            new PlayerInizializator(PlayerStruct, Position, Rotation);
         }
     }
 

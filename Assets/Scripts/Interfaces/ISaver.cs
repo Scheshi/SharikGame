@@ -1,7 +1,7 @@
 ﻿namespace SharikGame {
-    public interface ISaver<T>
+    public interface ISaver
     {
         void Save(IData data, string path = null);
-        T Load<T>(string path = null);
+        void Load(ref IData data, string path = null);
     }
 }
