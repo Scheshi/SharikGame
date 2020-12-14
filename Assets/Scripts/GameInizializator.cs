@@ -36,9 +36,10 @@ namespace SharikGame
             repository.AddDataToList(slider);
 
 
-            foreach(var obj in _interactiveObjects)
+            for(int i = 0; i < _interactiveObjects.Length; i++)
             {
-                new PointBonus(obj);
+                var bonus = new PointBonus(_interactiveObjects[i], i);
+                repository.AddDataToList(bonus);
 
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);

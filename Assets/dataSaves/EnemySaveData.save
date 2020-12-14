@@ -5,13 +5,13 @@
     <Speed>1</Speed>
   </EnemyStruct>
   <Position>
-    <x>7.58567333</x>
+    <x>5.42026138</x>
     <y>1</y>
-    <z>-8.751585</z>
+    <z>-1.68730116</z>
   </Position>
   <Rotation>
     <x>0</x>
-    <y>1.18797579E-05</y>
+    <y>0.000194837921</y>
     <z>0</z>
     <w>1</w>
   </Rotation>

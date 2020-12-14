@@ -11,6 +11,7 @@ namespace SharikGame
         {
             var type = data.GetType();
             var fullPath = $"{path}/{type.Name}.save";
+            if(data is PointBonus) fullPath = $"{path}/{type.Name + (data as PointBonus).ObjectID}.save";
             if (path == null) throw new ArgumentException("Неверные значения пути для загрузки данных в " + this.GetType());
             
             Debug.Log(type.Name);
@@ -33,9 +34,15 @@ namespace SharikGame
         {
             if (path == null || IData.Equals(data, null)) return;
             Type type = data.GetType();
+            string fullPath = $"{path}/{type.Name}.save";
+            if (data is PointBonus)
+            {
+                fullPath = $"{path}/{type.Name + (data as PointBonus).ObjectID}.save";
+            }
             XmlSerializer serializer = new XmlSerializer(type);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            using (FileStream stream = new FileStream($"{path}/{type.Name}.save", FileMode.Create))
+
+            using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
                 serializer.Serialize(stream, data);
                 stream.Close();
