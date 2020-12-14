@@ -65,7 +65,9 @@ namespace SharikGame {
         public void FromLoad()
         {
             _currentValue = SerializedValue - 1;
+            ServiceLocator.GetDependency<GameOverChecker>().ChangeToSerializedValue();
             ChangeValue();
+
         }
 
         #endregion

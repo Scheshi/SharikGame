@@ -15,9 +15,11 @@ namespace SharikGame
             
             Debug.Log(type.Name);
             XmlSerializer serializer = new XmlSerializer(type);
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             if (!File.Exists(fullPath))
             {
-                throw new ArgumentException($"Нет сохранений для типa {type.Name}");
+                Debug.Log($"Нет сохранений для типa {type.Name}");
+                return;
             }
             using (FileStream stream = new FileStream(fullPath, FileMode.Open))
             {
@@ -32,7 +34,7 @@ namespace SharikGame
             if (path == null || IData.Equals(data, null)) return;
             Type type = data.GetType();
             XmlSerializer serializer = new XmlSerializer(type);
-
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             using (FileStream stream = new FileStream($"{path}/{type.Name}.save", FileMode.Create))
             {
                 serializer.Serialize(stream, data);

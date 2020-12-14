@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <PlayerSaveData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Position>
-    <x>7.601312</x>
+    <x>4.744419</x>
     <y>0.5</y>
-    <z>-17.63007</z>
+    <z>-9.279035</z>
   </Position>
   <Rotation>
-    <x>-4.900604E-21</x>
-    <y>-5.83132933E-05</y>
-    <z>1.05793757E-23</z>
-    <w>1</w>
+    <x>0.624772668</x>
+    <y>-5.32915827E-08</y>
+    <z>3.661023E-08</z>
+    <w>0.7808068</w>
   </Rotation>
   <PlayerStruct>
     <LifeCount>3</LifeCount>
