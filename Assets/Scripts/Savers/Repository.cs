@@ -79,9 +79,6 @@ namespace SharikGame {
             {
                 Debug.Log($"Загружается {data.GetType().Name}\n");
 
-                if (ServiceLocator.IsHas(data.GetType()) && data.GetType() != typeof(PlayerSaveData)) 
-                    ServiceLocator.RemoveDependency(data);
-
                 if (data is IUpdatable) ControllersUpdater.RemoveUpdate((IUpdatable)data);
                 var item = data;
                 _saver.Load(ref item, _folderPath);

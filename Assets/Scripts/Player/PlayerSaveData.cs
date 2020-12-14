@@ -52,9 +52,9 @@ namespace SharikGame {
 
         public void FromLoad()
         {
-            ServiceLocator.GetDependency<Repository>().RemoveDataFromList(typeof(PlayerSaveData));
-            Debug.Log(PlayerStruct.LifeCount);
-            new PlayerInizializator(this);
+            _model = new PlayerModel(PlayerStruct);
+            _playerTransform.position = Position;
+            _playerTransform.rotation = Rotation;
         }
     }
 

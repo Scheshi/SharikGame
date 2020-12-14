@@ -9,19 +9,10 @@ namespace SharikGame {
     {
         #region Fields
 
+        public int SerializedValue;
         public event Action ChangeValueEvent;
         private Slider _slider;
         private int _currentValue;
-        
-        public int SerializedValue { get
-            {
-                return _currentValue;
-            }
-            set
-            {
-                return;
-            }
-        }
 
         #endregion
 
@@ -73,7 +64,8 @@ namespace SharikGame {
 
         public void FromLoad()
         {
-            //throw new NotImplementedException();
+            _currentValue = SerializedValue - 1;
+            ChangeValue();
         }
 
         #endregion
