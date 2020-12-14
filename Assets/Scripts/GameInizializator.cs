@@ -14,10 +14,11 @@ namespace SharikGame
         [SerializeField] private Transform[] _pointsForEnemySpawn;
         [SerializeField] private EnemyData _enemyData;
         [SerializeField] private GameObject _uiGameOver;
+        [SerializeField] private SerializerEnum _serializer;
 
         void Start()
         {
-            var repository = new Repository();
+            var repository = new Repository(_serializer);
             ServiceLocator.SetDependency(repository);
             GameObject updaterGO = new GameObject("Updater");
             updaterGO.AddComponent<ControllersUpdater>();

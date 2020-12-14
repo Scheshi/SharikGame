@@ -4709,6 +4709,7 @@ MonoBehaviour:
   - {fileID: 1524985488}
   _enemyData: {fileID: 11400000, guid: b53a61166935e5d4e84f0759b6b75ab1, type: 2}
   _uiGameOver: {fileID: 89847161}
+  _serializer: 1
 --- !u!4 &1033118975
 Transform:
   m_ObjectHideFlags: 0

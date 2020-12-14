@@ -13,8 +13,7 @@ namespace SharikGame
 
         public PlayerInizializator(PersonData playerData, Transform startPointTransform)
         {
-            var resource = Resources.Load("Prefabs/Player");
-            _gameObject = (GameObject)resource;
+            _gameObject = Resources.Load<GameObject>("Prefabs/Player");
             _struct = playerData.PlayerStruct;
             _startPosition = startPointTransform.position;
             _startRotation = Quaternion.identity;
@@ -23,8 +22,7 @@ namespace SharikGame
 
         public PlayerInizializator(PlayerStruct str, Vector3 position, Quaternion rotation)
         {
-            var resource = Resources.Load<GameObject>("Prefabs/Player");
-            _gameObject = resource;
+            _gameObject = Resources.Load<GameObject>("Prefabs/Player");
             _struct = str;
             _startPosition = position;
             _startRotation = rotation;

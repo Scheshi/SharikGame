@@ -19,9 +19,18 @@ namespace SharikGame {
 
         #region Contructors
 
-        public Repository()
+        public Repository(SerializerEnum serializer)
         {
-            _saver = new XMLSerializer();
+            switch (serializer)
+            {
+                case SerializerEnum.XML:
+                    _saver = new XMLSerializer();
+                    break;
+                case SerializerEnum.Binary:
+                    _saver = new BinarySerializator();
+                    break;
+            }
+            
         }
 
         #endregion
@@ -64,7 +73,10 @@ namespace SharikGame {
         {
             for(int i = 0; i<_datas.Count; i++)
             {
-                Debug.Log($"Загружено на {(i / _datas.Count) * 100}%");
+                
+                Debug.Log($"Загружается {_datas[i].GetType().Name}\n" +
+                    $"Загружено на {((float)i / _datas.Count) * 100}%");
+
                 if(ServiceLocator.IsHas(_datas[i].GetType())) 
                     ServiceLocator.RemoveDependency(_datas.Count);
 
