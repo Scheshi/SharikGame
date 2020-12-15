@@ -74,11 +74,8 @@ namespace SharikGame {
 
         public void Load()
         {
-            Debug.Log("Общее кол-во объектов в списке: " + _datas.Count);
             foreach(var data in _datas)
             {
-                Debug.Log($"Загружается {data.GetType().Name}\n");
-
                 if (data is IUpdatable) ControllersUpdater.RemoveUpdate((IUpdatable)data);
                 var item = data;
                 _saver.Load(ref item, _folderPath);

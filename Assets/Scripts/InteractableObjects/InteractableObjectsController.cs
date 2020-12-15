@@ -6,10 +6,17 @@ namespace SharikGame
 {
     public abstract class InteractableObjectsController : IFrameUpdatable, IDisposable, IInteractable, IData
     {
+        #region Fields
+
+        public bool IsActive;
         private int _objectID;
         private GameObject _gameObject;
         private float _radius = 1.2f;
-        public bool IsActive;
+
+        #endregion
+
+
+        #region Properties
 
         public string ObjectID
         {
@@ -23,6 +30,11 @@ namespace SharikGame
             }
         }
 
+        #endregion
+
+
+        #region Contructors
+
         public InteractableObjectsController()
         {
             return;
@@ -35,6 +47,11 @@ namespace SharikGame
             ControllersUpdater.AddUpdate(this);
             IsActive = true;
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void Dispose()
         {
@@ -82,5 +99,7 @@ namespace SharikGame
                 ControllersUpdater.AddUpdate(this);
             }
         }
+
+        #endregion
     }
 }

@@ -13,8 +13,7 @@ namespace SharikGame
             var fullPath = $"{path}/{type.Name}.save";
             if(data is PointBonus) fullPath = $"{path}/{type.Name + (data as PointBonus).ObjectID}.save";
             if (path == null) throw new ArgumentException("Неверные значения пути для загрузки данных в " + this.GetType());
-            
-            Debug.Log(type.Name);
+
             XmlSerializer serializer = new XmlSerializer(type);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             if (!File.Exists(fullPath))
@@ -26,6 +25,7 @@ namespace SharikGame
             {
                 data = (IData)serializer.Deserialize(stream);
                 stream.Close();
+                if (data is PointBonus) Debug.Log((data as PointBonus).IsActive);
             }
 
         }
