@@ -19,6 +19,8 @@ namespace SharikGame
             _sliderController = ServiceLocator.GetDependency<SliderController>();
         }
 
+        public override bool IsActive { get; set; }
+
         public override void Interact()
         {
             _sliderController.ChangeValue();

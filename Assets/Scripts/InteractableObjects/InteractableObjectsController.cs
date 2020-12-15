@@ -9,7 +9,7 @@ namespace SharikGame
     {
         #region Fields
 
-        public bool IsActive;
+        //public abstract bool IsActive;
         [NonSerialized]private int _objectID;
         [NonSerialized]private GameObject _gameObject;
         [NonSerialized]private float _radius = 1.2f;
@@ -18,6 +18,8 @@ namespace SharikGame
 
 
         #region Properties
+
+        public abstract bool IsActive { get; set; }
 
         public string ObjectID
         {

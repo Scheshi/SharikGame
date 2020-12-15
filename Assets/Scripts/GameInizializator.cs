@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -23,6 +24,10 @@ namespace SharikGame
             GameObject updaterGO = new GameObject("Updater");
             updaterGO.AddComponent<ControllersUpdater>();
 
+            RadarController radar = new RadarController(FindObjectOfType<Image>().transform);
+            ServiceLocator.SetDependency(radar);
+            ControllersUpdater.AddUpdate(radar);
+
             var gameOverChecker = new GameOverChecker(_uiGameOver);
             new ButtonReloaderView(_uiGameOver.GetComponentInChildren<Button>());
             ServiceLocator.SetDependency(gameOverChecker);
@@ -40,6 +45,8 @@ namespace SharikGame
             {
                 var bonus = new PointBonus(_interactiveObjects[i], i);
                 repository.AddDataToList(bonus);
+                    Image sprite = Resources.Load("Textures/RadarObject") as Image;
+                    radar.AddingObject(_interactiveObjects[i], sprite);
 
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);
