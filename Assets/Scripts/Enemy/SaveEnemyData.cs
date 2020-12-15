@@ -11,8 +11,8 @@ namespace SharikGame
         public Vector3Serializable Position;
         public QuaternionSerializable Rotation;
 
-        private Transform _enemyTransform;
-        private EnemyModel _model;
+        [NonSerialized]private Transform _enemyTransform;
+        [NonSerialized]private EnemyModel _model;
 
         public EnemySaveData()
         {

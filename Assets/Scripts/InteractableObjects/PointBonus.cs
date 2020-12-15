@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
+using System;
 
 
 namespace SharikGame
 {
+    [Serializable]
     public class PointBonus : InteractableObjectsController
     {
-        private SliderController _sliderController;
+        [NonSerialized]private SliderController _sliderController;
 
         public PointBonus()
         {

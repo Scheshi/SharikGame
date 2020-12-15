@@ -9,8 +9,8 @@ namespace SharikGame {
         public QuaternionSerializable Rotation;
         public PlayerStruct PlayerStruct;
 
-        private Transform _playerTransform;
-        private PlayerModel _model;
+        [NonSerialized]private Transform _playerTransform;
+        [NonSerialized]private PlayerModel _model;
 
         public PlayerSaveData()
         {

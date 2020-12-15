@@ -4,14 +4,15 @@ using System;
 
 namespace SharikGame
 {
+    [Serializable]
     public abstract class InteractableObjectsController : IFrameUpdatable, IDisposable, IInteractable, IData
     {
         #region Fields
 
         public bool IsActive;
-        private int _objectID;
-        private GameObject _gameObject;
-        private float _radius = 1.2f;
+        [NonSerialized]private int _objectID;
+        [NonSerialized]private GameObject _gameObject;
+        [NonSerialized]private float _radius = 1.2f;
 
         #endregion
 

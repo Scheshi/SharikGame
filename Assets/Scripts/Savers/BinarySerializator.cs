@@ -16,9 +16,11 @@ namespace SharikGame
 
             Debug.Log(type.Name);
             BinaryFormatter serializer = new BinaryFormatter();
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             if (!File.Exists(fullPath))
             {
-                throw new ArgumentException($"Нет сохранений для типa {type.Name}");
+                Debug.Log($"Нет сохранений для типa {type.Name}");
+                return;
             }
             using (FileStream stream = new FileStream(fullPath, FileMode.Open))
             {
