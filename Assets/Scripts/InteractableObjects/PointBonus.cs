@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
+using System;
 
 
 namespace SharikGame
 {
+    [Serializable]
     public class PointBonus : InteractableObjectsController
     {
-        private SliderController _sliderController;
-        public PointBonus(GameObject gameObject) : base(gameObject)
+        [NonSerialized]private SliderController _sliderController;
+
+        public PointBonus()
+        {
+            return;
+        }
+
+        public PointBonus(GameObject gameObject, int objectID) : base(gameObject, objectID)
         {
             _sliderController = ServiceLocator.GetDependency<SliderController>();
         }
+
+        public override bool IsActive { get; set; }
 
         public override void Interact()
         {

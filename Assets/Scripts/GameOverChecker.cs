@@ -27,6 +27,11 @@ namespace SharikGame {
             Debug.Log(_currentValue);
             if (_currentValue >= ServiceLocator.GetDependency<SliderController>().MaxValue)
                 GameEnd(true, true);
-    }
+        }
+
+        public void ChangeToSerializedValue()
+        {
+            _currentValue = ServiceLocator.GetDependency<SliderController>().SerializedValue;
+        }
     }
 }

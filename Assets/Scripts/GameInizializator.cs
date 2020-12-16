@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -14,27 +15,39 @@ namespace SharikGame
         [SerializeField] private Transform[] _pointsForEnemySpawn;
         [SerializeField] private EnemyData _enemyData;
         [SerializeField] private GameObject _uiGameOver;
+        [SerializeField] private SerializerEnum _serializer;
 
         void Start()
         {
+            var repository = new Repository(_serializer);
+            ServiceLocator.SetDependency(repository);
             GameObject updaterGO = new GameObject("Updater");
             updaterGO.AddComponent<ControllersUpdater>();
+
+            RadarController radar = new RadarController(FindObjectOfType<Image>().transform);
+            ServiceLocator.SetDependency(radar);
+            ControllersUpdater.AddUpdate(radar);
 
             var gameOverChecker = new GameOverChecker(_uiGameOver);
             new ButtonReloaderView(_uiGameOver.GetComponentInChildren<Button>());
             ServiceLocator.SetDependency(gameOverChecker);
             gameOverChecker.GameEnd(false, false);
             new PlayerInizializator(_playerData, _startPoint);
-            var camera = new CameraController(ServiceLocator.GetDependency<GameObject>().transform);
-            ControllersUpdater.AddUpdate(camera);
             _sliderUI.maxValue = _interactiveObjects.Length;
             var slider = new SliderController(_sliderUI);
             ServiceLocator.SetDependency(slider);
-            
 
-            foreach(var obj in _interactiveObjects)
+            //ServiceLocator.GetDependency<Repository>().AddDataToList(slider);
+            repository.AddDataToList(slider);
+
+
+            for(int i = 0; i < _interactiveObjects.Length; i++)
             {
-                new PointBonus(obj);
+                var bonus = new PointBonus(_interactiveObjects[i], i);
+                repository.AddDataToList(bonus);
+                    var sprite = Resources.Load<GameObject>("Textures/PickupRadar");
+                    radar.AddingObject(_interactiveObjects[i], sprite);
+
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);
 
