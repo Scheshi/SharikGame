@@ -8,7 +8,6 @@ namespace SharikGame
         private Transform _transform;
         private EnemyModel _model;
         private float _radiusForCheck = 5.0f;
-        private bool _isActive;
 
         public EnemyController(IModel model, GameObject go) : base(model, go)
         {

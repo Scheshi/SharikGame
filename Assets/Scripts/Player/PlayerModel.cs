@@ -3,7 +3,7 @@
 
 namespace SharikGame
 {
-    public class PlayerModel : IModel
+    internal class PlayerModel : IModel
     {
         private PlayerStruct _playerStruct;
 
@@ -19,7 +19,6 @@ namespace SharikGame
 
         public int LifeCount => _playerStruct.LifeCount;
 
-        public PlayerStruct Struct => _playerStruct;
 
         /// <summary>
         /// Урон игрока

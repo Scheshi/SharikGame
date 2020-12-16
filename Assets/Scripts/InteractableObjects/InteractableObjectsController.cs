@@ -4,63 +4,21 @@ using System;
 
 namespace SharikGame
 {
-    [Serializable]
-    public abstract class InteractableObjectsController : IFrameUpdatable, IDisposable, IInteractable, IData
+    public abstract class InteractableObjectsController : IFrameUpdatable, IDisposable, IInteractable
     {
-        #region Fields
+        private GameObject _gameObject;
+        private float _radius = 1.2f;
 
-        //public abstract bool IsActive;
-        [NonSerialized]private int _objectID;
-        [NonSerialized]private GameObject _gameObject;
-        [NonSerialized]private float _radius = 1.2f;
-
-        #endregion
-
-
-        #region Properties
-
-        public abstract bool IsActive { get; set; }
-
-        public string ObjectID
+        public InteractableObjectsController(GameObject gameObject)
         {
-            get
-            {
-                return _objectID.ToString();
-            }
-            set
-            {
-                return;
-            }
-        }
-
-        #endregion
-
-
-        #region Contructors
-
-        public InteractableObjectsController()
-        {
-            return;
-        }
-
-        public InteractableObjectsController(GameObject gameObject, int objectID)
-        {
-            _objectID = objectID;
             _gameObject = gameObject;
             ControllersUpdater.AddUpdate(this);
-            IsActive = true;
         }
-
-        #endregion
-
-
-        #region Methods
 
         public void Dispose()
         {
-            ServiceLocator.GetDependency<RadarController>().RemoveObject(_gameObject);
             ControllersUpdater.RemoveUpdate(this);
-            _gameObject.SetActive(false);
+            GameObject.Destroy(_gameObject);
         }
 
         public abstract void Interact();
@@ -82,28 +40,11 @@ namespace SharikGame
                         
                         Interact();
                         Dispose();
-                        IsActive = false;
                         break;
                     }
                 }
             }
         }
 
-        public void FromSave()
-        {
-            
-        }
-
-        public void FromLoad()
-        {
-            Debug.Log(ObjectID + IsActive);
-            if (IsActive)
-            {
-                _gameObject.SetActive(true);
-                ControllersUpdater.AddUpdate(this);
-            }
-        }
-
-        #endregion
     }
 }

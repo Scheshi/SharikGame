@@ -5,7 +5,6 @@ namespace SharikGame {
     public class EnemyModel : IModel
     {
         private EnemyStruct _enemyStruct;
-        private bool _isActive;
 
         public EnemyModel(EnemyStruct @struct)
         {
@@ -18,12 +17,5 @@ namespace SharikGame {
         public int Damage => _enemyStruct.Damage;
 
         public float Speed => _enemyStruct.Speed;
-
-        public bool IsActive => _isActive;
-
-        public void ActiveToggle(bool isActive)
-        {
-            _isActive = isActive;
-        }
     }
 }
