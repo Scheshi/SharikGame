@@ -24,7 +24,7 @@ namespace SharikGame
         public void FixedUpdateTick()
         {
             _movementVector *= _model.Speed;
-            _movementVector.y = _rigidbody.velocity.y;
+            _movementVector.y = 0.0f;
             _rigidbody.velocity = _movementVector;
         }
 

@@ -30,6 +30,8 @@ namespace SharikGame {
                             var enemy = GameObject.Instantiate(_data.gameObject, _pointsForSpawn[i].position, Quaternion.identity);
                             var model = new EnemyModel(_data.EnemyStruct);
                             var controller = new EnemyController(model, enemy);
+                            var enemySprite = Resources.Load<GameObject>("Textures/EnemyRadar");
+                            ServiceLocator.GetDependency<RadarController>().AddingObject(enemy, enemySprite);
                             ServiceLocator.GetDependency<Repository>().AddDataToList(new EnemySaveData(model, enemy.transform));
                             var point = _pointsForSpawn[i];
                             _pointsForSpawn.Remove(point);

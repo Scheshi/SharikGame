@@ -45,7 +45,7 @@ namespace SharikGame
             {
                 var bonus = new PointBonus(_interactiveObjects[i], i);
                 repository.AddDataToList(bonus);
-                    Image sprite = Resources.Load("Textures/RadarObject") as Image;
+                    var sprite = Resources.Load<GameObject>("Textures/PickupRadar");
                     radar.AddingObject(_interactiveObjects[i], sprite);
 
             }

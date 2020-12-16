@@ -7,6 +7,6 @@ namespace SharikGame
     public struct RadarObject
     {
         public GameObject GameObject;
-        public Image Image;
+        public GameObject Image;
     }
 }

@@ -19,16 +19,17 @@ namespace SharikGame
             _mapTransform = mapTransform;
         }
 
-        public void AddingObject(GameObject obj, Image image)
+        public void AddingObject(GameObject obj, GameObject image)
         {
             var trueImage = GameObject.Instantiate(image);
+
 
             _object.Add(new RadarObject { GameObject = obj, Image = trueImage });
         }
 
-        public void RemoveObject(GameObject obj, Image image)
+        public void RemoveObject(GameObject obj)
         {
-            RadarObject removingObject = _object.FirstOrDefault(x => x.GameObject == obj && x.Image == image);
+            RadarObject removingObject = _object.FirstOrDefault(x => x.GameObject == obj);
             _object.Remove(removingObject);
             GameObject.Destroy(removingObject.Image);
         }

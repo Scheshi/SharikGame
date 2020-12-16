@@ -58,6 +58,7 @@ namespace SharikGame
 
         public void Dispose()
         {
+            ServiceLocator.GetDependency<RadarController>().RemoveObject(_gameObject);
             ControllersUpdater.RemoveUpdate(this);
             _gameObject.SetActive(false);
         }

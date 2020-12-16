@@ -34,6 +34,8 @@ namespace SharikGame
             ControllersUpdater.AddUpdate(camera);
             ServiceLocator.SetDependency(camera);
             ServiceLocator.GetDependency<Repository>().AddDataToList(new PlayerSaveData(playerModel, player.transform));
+            var playerSprite = Resources.Load<GameObject>("Textures/PlayerRadar");
+            ServiceLocator.GetDependency<RadarController>().AddingObject(player, playerSprite);
         }
     }
 }
