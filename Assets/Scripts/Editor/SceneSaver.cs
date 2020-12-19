@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,137 +9,86 @@ namespace SharikGame
 {
     public class SceneSaver
     {
-        private static string _path = Application.dataPath + "/Saves";
+        private static string _dataPath = Application.dataPath + "/Resources/";
+        private static string _prefabsPath = "Prefabs/Level/";
+
+        public static string PrefabsPath
+        {
+            get
+            {
+                return _prefabsPath;
+            }
+            set
+            {
+                if(value != String.Empty)
+                {
+                    _prefabsPath = value;
+                }
+            }
+        }
 
         [MenuItem("Сцена/Сохранить сцену")]
         private static void SaveScene()
         {
-            var fullPath = _path + "Level.save";
-            var objects = GameObject.FindObjectsOfType<Transform>();
-            ObjectSerialzable[] serialzables = new ObjectSerialzable[objects.Length];
-            for(var i = 0; i<serialzables.Length; i++)
+            var fullPath = _dataPath + _prefabsPath;
+            Debug.Log("Начинаю сохранение сцены");
+            if (Directory.Exists(fullPath)) 
             {
-                serialzables[i] = new ObjectSerialzable()
+                var files = Directory.GetFiles(fullPath);
+                foreach(var file in files)
                 {
-                    FileName = objects[i].gameObject.name,
-                    Position = objects[i].position,
-                    Rotation = objects[i].rotation,
-                    Scale = objects[i].localScale
-                };
+                    File.Delete(file);
+                }
+                Directory.Delete(fullPath); 
             }
-            if (!Directory.Exists(_path)) Directory.CreateDirectory(_path);
-            XmlDocument xml = new XmlDocument();
-            XmlNode rootNode = xml.CreateElement("Level");
-            xml.AppendChild(rootNode);
             
-                foreach(var item in serialzables)
+            if(!Directory.Exists(fullPath))Directory.CreateDirectory(fullPath);
+            var objects = GameObject.FindObjectsOfType<Transform>();
+            for(var i = 0; i<objects.Length; i++)
+            {
+                if (objects[i].transform.parent != null)
                 {
-                var element = xml.CreateElement("FileName");
-                element.SetAttribute("value", item.FileName);
-                rootNode.AppendChild(element);
-
-                element = xml.CreateElement("ParentName");
-                element.SetAttribute("value", item.ParentName);
-                rootNode.AppendChild(element);
-
-                element = xml.CreateElement("Position");
-                element.SetAttribute("x", item.Position.x.ToString());
-                element.SetAttribute("y", item.Position.y.ToString());
-                element.SetAttribute("z", item.Position.z.ToString());
-                rootNode.AppendChild(element);
-
-
-                element = xml.CreateElement("Rotation");
-                element.SetAttribute("x", item.Rotation.x.ToString());
-                element.SetAttribute("y", item.Rotation.y.ToString());
-                element.SetAttribute("z", item.Rotation.z.ToString());
-                element.SetAttribute("w", item.Rotation.w.ToString());
-                rootNode.AppendChild(element);
-
-                element = xml.CreateElement("Scale");
-                element.SetAttribute("x", item.Scale.x.ToString());
-                element.SetAttribute("y", item.Scale.y.ToString());
-                element.SetAttribute("z", item.Scale.z.ToString());
-                rootNode.AppendChild(element);
-
-                
-
-                xml.Save(fullPath);
+                    continue;
+                }
+                bool success;
+                PrefabUtility.SaveAsPrefabAsset(objects[i].gameObject, fullPath + objects[i].gameObject.name + ".prefab", out success);
+                if (!success)
+                    throw new ArgumentException("Проблема с сохранением объекта в префаб");
+                GameObject.DestroyImmediate(objects[i].gameObject);
+                Debug.Log($"Сцена сохранена на {((float)i /objects.Length) * 100}%");
             }
+
+            Debug.Log("Сцена успешно сохранена");
         }
 
         [MenuItem("Сцена/Загрузить сцену")]
-        private static void LoadScene()
+        public static void LoadScene()
         {
-            var fullPath = _path + "Level.save";
-            if (!File.Exists(fullPath)) throw new NullReferenceException("Нет файла для загрузки уровня");
-            List<ObjectSerialzable> objects = new List<ObjectSerialzable>();
-            using (var stream = new XmlTextReader(fullPath))
+            Debug.Log("Очистка сцены");
+            foreach (var obj in GameObject.FindObjectsOfType<Transform>()) 
             {
-                while (stream.Read())
-                {
-                    float x;
-                    float y;
-                    float z;
-                    float w;
-                    var obj = new ObjectSerialzable();
-
-                    var key = "FileName";
-                    if (stream.IsStartElement(key)) {
-                        obj.FileName = stream.GetAttribute("value");
-                    }
-
-                    key = "ParentName";
-                    if (stream.IsStartElement(key))
-                    {
-                        obj.ParentName = stream.GetAttribute("value");
-                    }
-
-                    key = "Position";
-                    if (stream.IsStartElement(key)) {
-
-                        float.TryParse(stream.GetAttribute("x"), out x);
-                        float.TryParse(stream.GetAttribute("y"), out y);
-                        float.TryParse(stream.GetAttribute("z"), out z);
-                        obj.Position = new Vector3(x, y, z);
-                            }
-                    key = "Rotation";
-                    if (stream.IsStartElement(key))
-                    {
-                        float.TryParse(stream.GetAttribute("x"), out x);
-                        float.TryParse(stream.GetAttribute("y"), out y);
-                        float.TryParse(stream.GetAttribute("z"), out z);
-                        float.TryParse(stream.GetAttribute("z"), out w);
-                        obj.Rotation = new Quaternion(x, y, z, w);
-                    }
-                    key = "Scale";
-                    if (stream.IsStartElement(key))
-                    {
-                        float.TryParse(stream.GetAttribute("x"), out x);
-                        float.TryParse(stream.GetAttribute("y"), out y);
-                        float.TryParse(stream.GetAttribute("z"), out z);
-                        obj.Scale = new Vector3(x, y, z);
-                    }
-
-                    objects.Add(obj);
-                }
+                if (obj.parent != null) continue;
+#if UNITY_EDITOR
+                GameObject.DestroyImmediate(obj.gameObject);
+#else
+                GameObject.Destroy(obj.gameObject);
+#endif
             }
-            var gos = new GameObject[objects.Count];
-            for (int i = 0; i < gos.Length; i++)
+            Debug.Log("Начинаю загрузку сцены");
+            var objects = Resources.LoadAll(_prefabsPath, typeof(GameObject)).Cast<GameObject>().ToArray();
+            if (objects.Length <= 0) throw new NullReferenceException("Нет префабов для загрузки. Пожалуйста, сначала сохраните карту.");
+            foreach (var obj in objects)
             {
-                gos[i] = GameObject.Instantiate
-                    (
-                        GameObject.CreatePrimitive(PrimitiveType.Cube)
-                    );
-                gos[i].name = objects[i].FileName;
+                var go = GameObject.Instantiate(obj);
+                go.name = obj.name;
             }
-            for (int i = 0; i < gos.Length; i++)
-            {
-                gos[i].transform.parent = GameObject.Find(objects[i].ParentName).transform;
-                gos[i].transform.position = objects[i].Position;
-                gos[i].transform.rotation = objects[i].Rotation;
-                gos[i].transform.localScale = objects[i].Scale;
-            }
+            Debug.Log("Сцена загружена");
+        }
+
+        [MenuItem("Сцена/Открыть окно настройки сохранения сцены")]
+        private static void MenuOption()
+        {
+            EditorWindow.GetWindow(typeof(SettingSaver), false, "Настройки сохранения сцены");
         }
     }
 }

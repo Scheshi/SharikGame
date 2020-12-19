@@ -9,16 +9,35 @@ namespace SharikGame
     {
         
         [SerializeField] private PersonData _playerData;
-        [SerializeField] private Transform _startPoint;
-        [SerializeField] private Slider _sliderUI;
-        [SerializeField] private GameObject[] _interactiveObjects;
-        [SerializeField] private Transform[] _pointsForEnemySpawn;
+        private Transform[] _interactiveObjects;
+        private Transform[] _pointsForEnemySpawn;
         [SerializeField] private EnemyData _enemyData;
-        [SerializeField] private GameObject _uiGameOver;
         [SerializeField] private SerializerEnum _serializer;
 
-        void Start()
+        private GameObject _uiGameOver;
+        private Transform _startPoint;
+        private Slider _sliderUI;
+
+        private void Start()
         {
+            if(GameObject.FindObjectsOfType<Transform>().Length <= 0)
+            {
+                throw new NullReferenceException("Карта пуста. Пожалуйста, загрузите карту.");
+            }
+
+            _startPoint = GameObject.FindGameObjectWithTag("Respawn").transform;
+            _uiGameOver = GameObject.FindGameObjectWithTag("Finish");
+            _sliderUI = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
+            var enemyesRespawns = GameObject.FindGameObjectsWithTag("EnemyRespawn");
+            _pointsForEnemySpawn = new Transform[enemyesRespawns.Length];
+
+            for(int i = 0; i<enemyesRespawns.Length; i++)
+            {
+                _pointsForEnemySpawn[i] = enemyesRespawns[i].transform;
+            }
+
+            _interactiveObjects = GameObject.FindGameObjectWithTag("Bonuses").transform.GetComponentsInChildren<Transform>();
+
             var repository = new Repository(_serializer);
             ServiceLocator.SetDependency(repository);
             GameObject updaterGO = new GameObject("Updater");
@@ -43,10 +62,10 @@ namespace SharikGame
 
             for(int i = 0; i < _interactiveObjects.Length; i++)
             {
-                var bonus = new PointBonus(_interactiveObjects[i], i);
+                var bonus = new PointBonus(_interactiveObjects[i].gameObject, i);
                 repository.AddDataToList(bonus);
                     var sprite = Resources.Load<GameObject>("Textures/PickupRadar");
-                    radar.AddingObject(_interactiveObjects[i], sprite);
+                    radar.AddingObject(_interactiveObjects[i].gameObject, sprite);
 
             }
             new EnemySpawner(_pointsForEnemySpawn, _enemyData);
