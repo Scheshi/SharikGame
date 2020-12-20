@@ -9,8 +9,15 @@ namespace SharikGame
 {
     public class SceneSaver
     {
+        #region Fields
+
         private static string _dataPath = Application.dataPath + "/Resources/";
         private static string _prefabsPath = "Prefabs/Level/";
+
+        #endregion
+
+
+        #region Properties
 
         public static string PrefabsPath
         {
@@ -26,6 +33,11 @@ namespace SharikGame
                 }
             }
         }
+
+        #endregion
+
+
+        #region Methods
 
         [MenuItem("Сцена/Сохранить сцену")]
         private static void SaveScene()
@@ -90,5 +102,7 @@ namespace SharikGame
         {
             EditorWindow.GetWindow(typeof(SettingSaver), false, "Настройки сохранения сцены");
         }
+
+        #endregion
     }
 }

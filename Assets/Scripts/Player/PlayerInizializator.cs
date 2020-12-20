@@ -5,11 +5,17 @@ namespace SharikGame
 {
     public class PlayerInizializator
     {
+        #region Fields
 
         private PlayerStruct _struct;
         private GameObject _gameObject;
         private Vector3 _startPosition;
         private Quaternion _startRotation;
+
+        #endregion
+
+
+        #region Contructors
 
         public PlayerInizializator(PersonData playerData, Transform startPointTransform)
         {
@@ -20,6 +26,10 @@ namespace SharikGame
             Initialize();
         }
 
+        #endregion
+
+
+        #region Methods
 
         public void Initialize()
         {
@@ -37,5 +47,7 @@ namespace SharikGame
             var playerSprite = Resources.Load<GameObject>("Textures/PlayerRadar");
             ServiceLocator.GetDependency<RadarController>().AddingObject(player, playerSprite);
         }
+
+        #endregion
     }
 }

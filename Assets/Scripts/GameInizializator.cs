@@ -7,6 +7,8 @@ namespace SharikGame
 {
     public class GameInizializator : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] private PersonData _playerData;
         [SerializeField] private EnemyData _enemyData;
         [SerializeField] private SerializerEnum _serializer;
@@ -17,6 +19,11 @@ namespace SharikGame
         private GameObject _uiGameOver;
         private Transform _startPoint;
         private Slider _sliderUI;
+
+        #endregion
+
+
+        #region UnityMethods
 
         private void Start()
         {
@@ -74,7 +81,9 @@ namespace SharikGame
                 new EnemySpawner(_pointsForEnemySpawn, _enemyData);
                 Destroy(gameObject);
             }
-            
+
+            #endregion
+
         }
     }
 }

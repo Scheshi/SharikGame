@@ -6,10 +6,16 @@ namespace SharikGame
 {
     public abstract class ControllerFabric : IFixedUpdatable
     {
+        #region Fields
 
         private IModel _model;
         private Rigidbody _rigidbody;
         private Vector3 _movementVector;
+
+        #endregion
+
+
+        #region Contructors
 
         public ControllerFabric(IModel model, GameObject go)
         {
@@ -20,6 +26,11 @@ namespace SharikGame
             }
             ControllersUpdater.AddUpdate(this);
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void FixedUpdateTick()
         {
@@ -32,5 +43,7 @@ namespace SharikGame
         {
             _movementVector = vector;
         }
+
+        #endregion
     }
 }

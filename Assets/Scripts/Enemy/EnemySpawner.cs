@@ -5,9 +5,16 @@ using UnityEngine;
 namespace SharikGame {
     public class EnemySpawner : IFrameUpdatable
     {
+        #region Fields
+
         private List<Transform> _pointsForSpawn = new List<Transform>();
         private EnemyData _data;
         private float _radius = 5.0f;
+
+        #endregion
+
+
+        #region Constructors
 
         public EnemySpawner(Transform[] transforms, EnemyData data)
         {
@@ -15,6 +22,11 @@ namespace SharikGame {
             _data = data;
             ControllersUpdater.AddUpdate(this);
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void UpdateTick()
         {
@@ -42,5 +54,7 @@ namespace SharikGame {
 
             }
         }
+
+        #endregion
     }
 }
