@@ -10,11 +10,11 @@ namespace SharikGame
         private float _radiusForCheck = 5.0f;
         private bool _isActive;
 
-        public EnemyController(IModel model, GameObject go) : base(model, go)
+        public EnemyController(EnemyModel model, GameObject go) : base(model, go)
         {
             ControllersUpdater.AddUpdate(this);
             _transform = go.transform;
-            _model = model as EnemyModel;
+            _model = model;
         }
 
         public void UpdateTick()

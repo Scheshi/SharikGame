@@ -8,16 +8,27 @@ namespace SharikGame
 {
     public class RadarController : IFrameUpdatable
     {
+        #region Fields
+
         private List<RadarObject> _object = new List<RadarObject>();
         private readonly float _mapScale = 2.0f;
         private Transform _mapTransform;
         private Transform _main;
+
+        #endregion
+
+
+        #region Contructors
 
         public RadarController(Transform mapTransform)
         {
             _main = Camera.main.transform;
             _mapTransform = mapTransform;
         }
+        #endregion
+
+
+        #region Methods
 
         public void AddingObject(GameObject obj, GameObject image)
         {
@@ -58,5 +69,7 @@ namespace SharikGame
         {
             UpdateObjects();
         }
+
+        #endregion
     }
 }

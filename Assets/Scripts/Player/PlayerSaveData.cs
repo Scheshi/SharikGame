@@ -5,6 +5,7 @@ namespace SharikGame {
     [Serializable]
     public class PlayerSaveData : IData
     {
+        public string UserName;
         public Vector3Serializable Position;
         public QuaternionSerializable Rotation;
         public PlayerStruct PlayerStruct;
@@ -17,8 +18,9 @@ namespace SharikGame {
             return;
         }
 
-        public PlayerSaveData(PlayerModel model, Transform transform)
+        public PlayerSaveData(string name, PlayerModel model, Transform transform)
         {
+            UserName = name;
             _playerTransform = transform;
             _model = model;
             PlayerStruct = new PlayerStruct()

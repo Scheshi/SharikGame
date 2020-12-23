@@ -7,10 +7,14 @@ namespace SharikGame {
     {
         private GameObject _overUI;
         private int _currentValue;
+        private SliderController _slider;
 
-        public GameOverChecker(GameObject ui)
+        public GameOverChecker(GameObject ui, SliderController slider)
         {
+            _slider = slider;
             _overUI = ui;
+            slider.NewValue += AddValue;
+            slider.Load += ChangeToSerializedValue;
         }
 
         public void GameEnd(bool isEnd, bool isWin)
@@ -25,13 +29,13 @@ namespace SharikGame {
         {
             _currentValue++;
             Debug.Log(_currentValue);
-            if (_currentValue >= ServiceLocator.GetDependency<SliderController>().MaxValue)
+            if (_currentValue >= _slider.MaxValue)
                 GameEnd(true, true);
         }
 
         public void ChangeToSerializedValue()
         {
-            _currentValue = ServiceLocator.GetDependency<SliderController>().SerializedValue;
+            _currentValue = _slider.SerializedValue;
         }
     }
 }
