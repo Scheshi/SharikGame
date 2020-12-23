@@ -14,9 +14,9 @@ namespace SharikGame
             return;
         }
 
-        public PointBonus(GameObject gameObject, int objectID) : base(gameObject, objectID)
+        public PointBonus(GameObject gameObject, int objectID, SliderController slider) : base(gameObject, objectID)
         {
-            _sliderController = ServiceLocator.GetDependency<SliderController>();
+            _sliderController = slider;
         }
 
         public override bool IsActive { get; set; }

@@ -9,6 +9,7 @@ namespace SharikGame
     {
         #region Fields
 
+        [HideInInspector]public string UserName = "Player";
         [SerializeField] private PersonData _playerData;
         [SerializeField] private EnemyData _enemyData;
         [SerializeField] private SerializerEnum _serializer;
@@ -57,14 +58,15 @@ namespace SharikGame
                 ServiceLocator.SetDependency(radar);
                 ControllersUpdater.AddUpdate(radar);
 
-                var gameOverChecker = new GameOverChecker(_uiGameOver);
+                _sliderUI.maxValue = _interactiveObjects.Length;
+                var slider = new SliderController(_sliderUI);
+                //ServiceLocator.SetDependency(slider);
+
+                var gameOverChecker = new GameOverChecker(_uiGameOver, slider);
                 new ButtonReloaderView(_uiGameOver.GetComponentInChildren<Button>());
                 ServiceLocator.SetDependency(gameOverChecker);
                 gameOverChecker.GameEnd(false, false);
-                new PlayerInizializator(_playerData, _startPoint);
-                _sliderUI.maxValue = _interactiveObjects.Length;
-                var slider = new SliderController(_sliderUI);
-                ServiceLocator.SetDependency(slider);
+                new PlayerInizializator(_playerData, _startPoint, UserName);
 
                 //ServiceLocator.GetDependency<Repository>().AddDataToList(slider);
                 repository.AddDataToList(slider);
@@ -72,7 +74,7 @@ namespace SharikGame
 
                 for (int i = 0; i < _interactiveObjects.Length; i++)
                 {
-                    var bonus = new PointBonus(_interactiveObjects[i].gameObject, i);
+                    var bonus = new PointBonus(_interactiveObjects[i].gameObject, i, slider);
                     repository.AddDataToList(bonus);
                     var sprite = Resources.Load<GameObject>("Textures/PickupRadar");
                     radar.AddingObject(_interactiveObjects[i].gameObject, sprite);

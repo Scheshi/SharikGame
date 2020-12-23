@@ -9,6 +9,10 @@ namespace SharikGame {
     {
         #region Fields
 
+        public event Action NewValue;
+        public event Action Load;
+
+
         public int SerializedValue;
         [NonSerialized]private GameOverChecker _checker;
         [NonSerialized]private Slider _slider;
@@ -29,7 +33,6 @@ namespace SharikGame {
             _slider = slider;
             _currentValue = 0;
             _slider.value = _currentValue;
-            _checker = ServiceLocator.GetDependency<GameOverChecker>();
         }
 
         #endregion
@@ -54,7 +57,7 @@ namespace SharikGame {
             _currentValue++;
             _slider.value = _currentValue;
 
-            _checker.AddValue();
+            NewValue.Invoke();
         }
 
         public void FromSave()
@@ -65,7 +68,7 @@ namespace SharikGame {
         public void FromLoad()
         {
             _currentValue = SerializedValue - 1;
-            ServiceLocator.GetDependency<GameOverChecker>().ChangeToSerializedValue();
+            Load.Invoke();
             ChangeValue();
 
         }

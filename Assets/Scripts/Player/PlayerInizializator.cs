@@ -11,14 +11,16 @@ namespace SharikGame
         private GameObject _gameObject;
         private Vector3 _startPosition;
         private Quaternion _startRotation;
+        private string _playerName;
 
         #endregion
 
 
         #region Contructors
 
-        public PlayerInizializator(PersonData playerData, Transform startPointTransform)
+        public PlayerInizializator(PersonData playerData, Transform startPointTransform, string playerName)
         {
+            _playerName = playerName;
             _gameObject = Resources.Load<GameObject>("Prefabs/Player");
             _struct = playerData.PlayerStruct;
             _startPosition = startPointTransform.position;
@@ -43,7 +45,7 @@ namespace SharikGame
             var camera = new CameraController(ServiceLocator.GetDependency<GameObject>().transform);
             ControllersUpdater.AddUpdate(camera);
             ServiceLocator.SetDependency(camera);
-            ServiceLocator.GetDependency<Repository>().AddDataToList(new PlayerSaveData(playerModel, player.transform));
+            ServiceLocator.GetDependency<Repository>().AddDataToList(new PlayerSaveData(_playerName ,playerModel, player.transform));
             var playerSprite = Resources.Load<GameObject>("Textures/PlayerRadar");
             ServiceLocator.GetDependency<RadarController>().AddingObject(player, playerSprite);
         }
