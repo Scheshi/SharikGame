@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +55,7 @@ namespace SharikGame
                 GameObject updaterGO = new GameObject("Updater");
                 updaterGO.AddComponent<ControllersUpdater>();
 
-                RadarController radar = new RadarController(FindObjectOfType<Image>().transform);
+                RadarController radar = new RadarController(FindObjectsOfType<Image>().FirstOrDefault(x => x.gameObject.CompareTag("Bonuses")).transform);
                 ServiceLocator.SetDependency(radar);
                 ControllersUpdater.AddUpdate(radar);
 
